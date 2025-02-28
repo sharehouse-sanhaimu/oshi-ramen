@@ -22,9 +22,6 @@ RUN npm install -g pnpm
 # pnpm のグローバルバイナリディレクトリを設定
 RUN pnpm config set global-bin-dir /usr/local/bin
 
-# buildを許可
-RUN pnpm approve-builds
-
 # Expose the port the app runs on
 EXPOSE 3000
 
