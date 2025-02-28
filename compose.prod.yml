@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+
+  cloudflare:
+    image: "cloudflare/cloudflared:2025.2.1"
+    container_name: "cloudflare"
+    volumes: [ './cloudflare:/home/nonroot/.cloudflared' ]
+    command: tunnel run
+    restart: unless-stopped
