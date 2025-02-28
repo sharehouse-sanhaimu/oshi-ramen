@@ -1,9 +1,15 @@
 up:
-	docker compose up -d
+	@echo "Starting Nextjs App..."
+	@docker compose up -d
+	@echo "Nextjs App: http://localhost:3000"
 
 down:
-	docker compose down
+	@echo "Stopping Nextjs App..."
+	@docker compose down
+	@echo "Nextjs App stopped"
 
 restart:
-	docker compose down
-	docker compose up -d
+	@echo "Restarting Nextjs App..."
+	@docker compose down
+	@docker compose up -d
+	@echo "Nextjs App: http://localhost:3000"
