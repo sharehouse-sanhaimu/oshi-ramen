@@ -20,6 +20,8 @@ const provider = new GoogleAuthProvider();
 async function signUp() {
 	console.log("signUp");
 	const auth = getAuth();
+	console.log(auth);
+	console.log(provider);
 	signInWithPopup(auth, provider)
 		.then((result) => {
 			console.log("hello");
@@ -31,6 +33,7 @@ async function signUp() {
 			signInOrUp(user);
 		})
 		.catch((error) => {
+			console.log("error");
 			// Handle Errors here.
 			const errorCode = error.code;
 			const errorMessage = error.message;
