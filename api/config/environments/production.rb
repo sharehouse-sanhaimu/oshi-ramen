@@ -79,8 +79,8 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     "oshi-ramen.shaoba.tech",
-    "oshi-ramen.api.shaoba.tech",     # Allow requests from example.com
-    "oshi-ramen.magazine.shaoba.tech"
+    "oshi-ramen-api.shaoba.tech",     # Allow requests from example.com
+    "oshi-ramen-magazine.shaoba.tech"
   ]
   #
   # Skip DNS rebinding protection for the default health check endpoint.
