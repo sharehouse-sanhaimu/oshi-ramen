@@ -34,7 +34,7 @@ module V1
         {
           user_id: params.require(:user_id),
           name: params[:ramen_name] || "",
-          shop_name: params[:store_name] || "",
+          store_name: params[:store_name] || "",
           image_url: params[:file] || "",
           deliciousness_id: params[:delicious].to_i.presence || "",
           portion_id: params[:portion].to_i.presence || "",
