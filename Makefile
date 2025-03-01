@@ -39,6 +39,10 @@ logs-view:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f view
 
+logs-api:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose logs -f api
+
 remove-branch:
 	@echo "Removing branch..."
 	@git remote prune origin
