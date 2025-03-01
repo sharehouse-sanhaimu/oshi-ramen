@@ -27,6 +27,39 @@ module V1
       end
     end
 
+    def index
+      user_id = params[:user_id]
+      # user_id が指定されていない場合のエラーハンドリング
+      unless user_id.present?
+        return render json: { error: "User ID is required" }, status: :bad_request
+      end
+
+      # User の存在チェック
+      unless User.exists?(id: user_id)
+        return render json: { error: "User not found" }, status: :not_found
+      end
+      ramen_records = Ramen.where(user_id: 1)
+      response_data = modified_ramen_records = ramen_records.map do |record|
+        {
+          name: record.name,
+          user_id: record.user_id,
+          store_name: record.store_name,
+          image_url: record.image_url,
+          price: record.price,
+          description: record.description,
+          address: record.address,
+          parameters: {
+            deliciousness_id: record.deliciousness_id,
+            noodle_texture_id: record.noodle_texture_id,
+            noodle_thickness_id: record.noodle_thickness_id,
+            portion_id: record.portion_id,
+            soup_richness_id: record.soup_richness_id
+          }
+        }
+      end
+
+      render json: response_data, status: :ok
+    end
     # APIのリクエストパラメータを取得する関数
     #
     # @return [User] ボディパラメータ
