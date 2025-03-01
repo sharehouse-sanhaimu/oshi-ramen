@@ -87,10 +87,7 @@ export default function Home() {
 											<FormControl>
 												<div className="relative">
 													{/* カスタムボタンとして画像を表示 */}
-													<label
-														htmlFor="file-input"
-														className="cursor-pointer"
-													>
+													<label htmlFor="file-input" className="cursor-pointer">
 														<img
 															src="/ramen/IMG_9358.jpeg"
 															alt="アイコン"
@@ -173,13 +170,7 @@ export default function Home() {
 											<FormItem>
 												<FormLabel>Portion</FormLabel>
 												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="量"
-														{...field}
-													/>
+													<Input type="range" min={1} max={5} placeholder="量" {...field} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
