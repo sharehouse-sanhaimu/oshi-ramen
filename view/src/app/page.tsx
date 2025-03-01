@@ -16,7 +16,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { compressImage } from "@/lib/compressImage";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -53,8 +53,11 @@ export default function Home() {
 		}
 	}, [userId, form]);
 
-	const onSubmit = (data: Post) => {
+	const onSubmit = async (data: Post) => {
 		console.log(data);
+		const comppressedFile = await compressImage(data.file);
+		const sendData = { ...data, file: comppressedFile };
+		console.log(sendData);
 	};
 
 	const fileDelete = () => {
