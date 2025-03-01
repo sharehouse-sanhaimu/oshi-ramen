@@ -6,5 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function get_url(path: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}${path}`
+  console.log(url)
   return `${process.env.NEXT_PUBLIC_API_URL}${path}`
 }
