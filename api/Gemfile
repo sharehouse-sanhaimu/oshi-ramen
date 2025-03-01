@@ -19,6 +19,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 gem 'aws-sdk-s3'
 
+gem 'mime-types'
+
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
