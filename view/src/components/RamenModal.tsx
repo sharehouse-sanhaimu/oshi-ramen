@@ -25,15 +25,33 @@ export function RamenModal({
 	id,
 	name,
 	description,
-	image,
-	stats,
+	image_url,
+	parameters,
 }: RamenModalProps) {
 	const modalRef = useRef<HTMLDivElement>(null);
+	const chartAxisList = [
+		"うまい",
+		"こってり",
+		"バリカタ",
+		"大盛り",
+		"こってり",
+	];
+
+	// stats を RadarChart 用のデータに変換
+	const radarData = Object.entries(parameters).map(
+		([subject, value], index) => ({
+			subject: chartAxisList[index],
+			value,
+		}),
+	);
 
 	// モーダル外クリックで閉じる処理
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
-			if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+			if (
+				modalRef.current &&
+				!modalRef.current.contains(event.target as Node)
+			) {
 				setIsOpenModal(false);
 			}
 		}
@@ -52,12 +70,6 @@ export function RamenModal({
 		}
 	}, [isOpenModal]);
 
-	// stats を RadarChart 用のデータに変換
-	const radarData = Object.entries(stats).map(([subject, value]) => ({
-		subject,
-		value,
-	}));
-
 	if (!isOpenModal) return null;
 
 	return (
@@ -68,9 +80,9 @@ export function RamenModal({
 			>
 				<Card className="border rounded-xl shadow-lg">
 					<CardContent className="flex flex-col items-center p-6">
-						{image ? (
+						{image_url ? (
 							<img
-								src={image}
+								src={image_url}
 								alt={name}
 								className="w-60 h-40 object-cover rounded-lg mb-4"
 							/>

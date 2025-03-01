@@ -21,10 +21,9 @@ export const Ramen = ({ imageInfo }: RamenGallerysProps) => {
 				onClick={handleOpenModal}
 				className="relative w-full pb-[100%] overflow-hidden cursor-pointer border-0 p-0 group"
 			>
-				<Image
-					src={imageInfo.image}
+				<img
+					src={imageInfo.image_url}
 					alt={imageInfo.name}
-					fill
 					className="object-cover"
 				/>
 				<div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-30 transition duration-300" />

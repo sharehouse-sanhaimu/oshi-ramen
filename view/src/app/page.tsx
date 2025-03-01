@@ -1,6 +1,7 @@
 "use client";
 
 import { RamenGallery } from "@/components/RamenGallery";
+import type { RamenGalleryList } from "@/types/RamenGallery";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compressImage } from "@/lib/compressImage";
-import { initialRamenList } from "@/lib/mockData";
 import { getUrl } from "@/lib/utils";
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
@@ -26,6 +26,8 @@ export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const [gallery, setGallery] = useState<RamenGalleryList>([]);
 
 	const form = useForm<Post>({
 		resolver: zodResolver(postSchema),
@@ -53,9 +55,33 @@ export default function Home() {
 	}, []);
 
 	useEffect(() => {
-		if (userId) {
-			form.setValue("user_id", userId);
-		}
+		if (!userId) return;
+
+		// userId をフォームにセット
+		form.setValue("user_id", userId);
+
+		// 非同期関数で API を呼び出す
+		const fetchRamen = async () => {
+			try {
+				const response = await fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (!response.ok) {
+					console.error("APIエラー:", response.status);
+					return;
+				}
+				const data = await response.json();
+				console.log("取得したデータ:", data);
+				setGallery(data);
+				// 必要に応じて state などへの反映を行う
+			} catch (error) {
+				console.error("Fetchエラー:", error);
+			}
+		};
+
+		fetchRamen();
 	}, [userId, form]);
 
 	const fileDelete = () => {
@@ -299,7 +325,7 @@ export default function Home() {
 									<Button onClick={handleClick}>キャンセル</Button>
 								</>
 							) : (
-								<RamenGallery gallery={initialRamenList} />
+								<RamenGallery gallery={gallery} />
 							)}
 						</form>
 					</Form>
