@@ -1,3 +1,8 @@
+build:
+	@echo "Building..."
+	@docker compose build
+	@echo "built successfully"
+
 up:
 	@echo "Starting Nextjs App..."
 	@docker compose up -d
