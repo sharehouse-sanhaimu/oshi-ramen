@@ -72,7 +72,7 @@ export default function Home() {
 	console.log(form.watch("file"));
 
 	return (
-		<div className="flex flex-col min-h-screen px-4 py-10 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-50">
+		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-50">
 			{/* スマホサイズに制限するコンテナ */}
 			<div className="max-w-sm w-full mx-auto">
 				<div className="flex flex-col">
@@ -87,7 +87,10 @@ export default function Home() {
 											<FormControl>
 												<div className="relative">
 													{/* カスタムボタンとして画像を表示 */}
-													<label htmlFor="file-input" className="cursor-pointer">
+													<label
+														htmlFor="file-input"
+														className="cursor-pointer"
+													>
 														<img
 															src="/ramen/IMG_9358.jpeg"
 															alt="アイコン"
@@ -170,7 +173,13 @@ export default function Home() {
 											<FormItem>
 												<FormLabel>Portion</FormLabel>
 												<FormControl>
-													<Input type="range" min={1} max={5} placeholder="量" {...field} />
+													<Input
+														type="range"
+														min={1}
+														max={5}
+														placeholder="量"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
