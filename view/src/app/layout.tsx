@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<SessionProvider>
-			<html lang="en">
+			<html lang="ja">
 				<body className={`${inter.className} min-h-screen flex flex-col`}>
 					{children}
 				</body>
