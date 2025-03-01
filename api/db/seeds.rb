@@ -7,7 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-deliciousness_levels = ["まずい", "普通", "美味しい", "とても美味しい", "絶品"]
+deliciousness_levels = ["まずい", "そこそこ", "普通", "美味しい", "絶品"]
 portions = ["少なめ", "普通", "多め", "大盛り", "特盛"]
 noodle_textures = ["やわらかい", "普通", "少し硬め", "硬め", "バリカタ"]
 noodle_thicknesses = ["極細", "細麺", "中細麺", "中太麺", "極太"]
