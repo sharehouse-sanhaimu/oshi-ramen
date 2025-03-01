@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { getAuth } from "@/lib/firebaseClient";
-import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -41,15 +39,12 @@ export default function Home() {
 	});
 
 	useEffect(() => {
-		const auth = getAuth();
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			if (user) {
-				setUserId(user.uid);
-			} else {
-				setUserId(null);
-			}
-		});
-		return () => unsubscribe();
+		const userID = localStorage.getItem("userID");
+		if (userID) {
+			setUserId(userID);
+		} else {
+			setUserId(null);
+		}
 	}, []);
 
 	useEffect(() => {

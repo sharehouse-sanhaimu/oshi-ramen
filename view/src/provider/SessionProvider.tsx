@@ -13,7 +13,7 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 		}
 
 		const userId = localStorage.getItem("userID");
-
+		
 		if (!userId) {
 			console.log("ログインしてください")
 			window.location.href = "/login";
