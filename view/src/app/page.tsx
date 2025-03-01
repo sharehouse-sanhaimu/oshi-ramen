@@ -153,13 +153,7 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Portion</FormLabel>
 											<FormControl>
-												<Input
-													type="range"
-													min={1}
-													max={5}
-													placeholder="量"
-													{...field}
-												/>
+												<Input type="range" min={1} max={5} placeholder="量" {...field} />
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.
@@ -175,13 +169,7 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Thick</FormLabel>
 											<FormControl>
-												<Input
-													type="range"
-													min={1}
-													max={5}
-													placeholder="太さ"
-													{...field}
-												/>
+												<Input type="range" min={1} max={5} placeholder="太さ" {...field} />
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.
@@ -197,13 +185,7 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Texture</FormLabel>
 											<FormControl>
-												<Input
-													type="range"
-													min={1}
-													max={5}
-													placeholder="コシ"
-													{...field}
-												/>
+												<Input type="range" min={1} max={5} placeholder="コシ" {...field} />
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.
