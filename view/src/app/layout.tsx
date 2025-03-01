@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import SessionProvider from "@/provider/SessionProvider";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -18,10 +19,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="ja">
-			<body className={`${inter.className} min-h-screen flex flex-col`}>
-				<div className="flex-grow">{children}</div>
-			</body>
-		</html>
+		<SessionProvider>
+			<html lang="en">
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				>
+					{children}
+				</body>
+			</html>
+		</SessionProvider>
 	);
 }
