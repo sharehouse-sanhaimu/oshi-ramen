@@ -41,5 +41,8 @@ module Api
           methods: [:get, :post, :put, :patch, :delete, :options, :head]
       end
     end
+
+    # servicesディレクトリをオートロードパスに追加
+    config.autoload_paths += %W[#{config.root}/app/services]
   end
 end

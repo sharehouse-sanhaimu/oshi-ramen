@@ -12,6 +12,7 @@ const MAX_IMAGE_SIZE = 5; // 5MB
 // unionを使ってnullも許容した上で、後で必須チェックを行う
 const fileSchema = z
 	.union([
+		z.undefined(),
 		z.null(),
 		z.preprocess(
 			(val) => {
@@ -20,23 +21,20 @@ const fileSchema = z
 				}
 				return val;
 			},
-			z
-				.instanceof(File)
-				.refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
-					message: "ファイルサイズは最大5MBです",
-				})
-				.refine((file) => IMAGE_TYPES.includes(file.type), {
-					message: ".jpgもしくは.pngのみ可能です",
-				}),
+			z.instanceof(File).refine((file) => IMAGE_TYPES.includes(file.type), {
+				message: ".jpgもしくは.pngのみ可能です",
+			}),
 		),
 	])
-	.refine((file) => file !== null, { message: "必須です" });
+	.refine((file) => file !== undefined && file !== null, {
+		message: "必須です",
+	});
 
 export const postSchema = z.object({
 	user_id: z.number(),
 	store_name: z.string(),
 	ramen_name: z.string(),
-	file: fileSchema,
+	file: z.union([z.null(), fileSchema]),
 	deliciousness_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),

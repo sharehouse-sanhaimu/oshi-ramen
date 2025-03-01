@@ -9,7 +9,7 @@ type RamenGallerysProps = {
 
 export const RamenGallery = ({ gallery }: RamenGallerysProps) => {
 	return (
-		<div className="grid grid-cols-3 gap-0">
+		<div className="grid grid-cols-3 gap-0.5">
 			{gallery.map((ramen) => (
 				<Ramen imageInfo={ramen} key={ramen.id} />
 			))}

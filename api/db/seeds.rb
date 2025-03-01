@@ -49,6 +49,7 @@ Ramen.find_or_create_by!(
   name: "醤油ラーメン",
   store_name: "ラーメン一番",
   image_url: "https://example.com/ramen.jpg",
+  key: "77ramen.jpg",
   deliciousness_id: deliciousness.id,
   noodle_texture_id: noodle_texture.id,
   noodle_thickness_id: noodle_thickness.id,
