@@ -7,6 +7,8 @@ services:
       - ./view/.pnpm-store:/app/.pnpm-store
     ports:
       - "3000:3000"
+    env_file:
+      - view.env
     command: ["sh", "-c", "pnpm install && pnpm dev"]
 
   api:
