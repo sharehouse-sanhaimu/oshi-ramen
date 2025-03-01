@@ -33,4 +33,30 @@ soup_richnesses.each do |richness|
   SoupRichness.find_or_create_by!(notation: richness)
 end
 
+# ユーザーの仮データ（ユーザーが存在しないとエラーになるため）
+user = User.first || User.create!(google_id: "test1", nickname: "テストユーザー")
+
+# 各テーブルのIDを取得
+deliciousness = Deliciousness.find_by(notation: "美味しい")
+noodle_texture = NoodleTexture.find_by(notation: "普通")
+noodle_thickness = NoodleThickness.find_by(notation: "中細麺")
+portion = Portion.find_by(notation: "普通")
+soup_richness = SoupRichness.find_by(notation: "普通")
+
+# `ramen` テーブルにデータを投入
+Ramen.find_or_create_by!(
+  user_id: user.id,
+  name: "醤油ラーメン",
+  shop_name: "ラーメン一番",
+  image_url: "https://example.com/ramen.jpg",
+  deliciousness_id: deliciousness.id,
+  noodle_texture_id: noodle_texture.id,
+  noodle_thickness_id: noodle_thickness.id,
+  portion_id: portion.id,
+  soup_richness_id: soup_richness.id,
+  price: 800,
+  description: "昔ながらのあっさり醤油ラーメン。",
+  address: "東京都新宿区1-1-1"
+)
+
 puts "Seed data inserted successfully!"
