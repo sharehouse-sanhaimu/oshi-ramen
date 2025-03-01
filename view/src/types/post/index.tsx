@@ -37,23 +37,23 @@ export const postSchema = z.object({
 	store_name: z.string(),
 	ramen_name: z.string(),
 	file: fileSchema,
-	delicious: z.preprocess(
+	deliciousness_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),
 	),
-	portion: z.preprocess(
+	portion_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),
 	),
-	thick: z.preprocess(
+	thick_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),
 	),
-	texture: z.preprocess(
+	texture_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),
 	),
-	soup: z.preprocess(
+	soup_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),
 	),
