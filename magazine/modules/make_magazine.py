@@ -27,6 +27,7 @@ def make_magazine(
     FONT_SIZE = 24
     LINE_HEIGHT = 28
     IMAGE_SIZE = 2.75
+    CHART_SIZE = 3
 
     c = canvas.Canvas(output_path, pagesize=landscape(A4))
     width, height = landscape(A4)
@@ -59,7 +60,7 @@ def make_magazine(
     image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
-    new_heighmake_magazinet = 2 * inch
+    new_height = CHART_SIZE * inch
     new_width = new_height * aspect_ratio
     x_position = 0.5 * inch
     y_position = 0.25 * inch
@@ -108,7 +109,7 @@ def make_magazine(
     image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
-    new_height = 2 * inch
+    new_height = CHART_SIZE * inch
     new_width = new_height * aspect_ratio
     x_position = (width - new_width) / 2 + 0.5 * inch
     y_position = height - new_height - 0.25 * inch
@@ -157,7 +158,7 @@ def make_magazine(
     image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
-    new_height = 2 * inch
+    new_height = CHART_SIZE * inch
     new_width = new_height * aspect_ratio
     x_position = width - new_width - 0.5 * inch
     y_position = 0.25 * inch
