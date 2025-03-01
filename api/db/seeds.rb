@@ -7,3 +7,8 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+deliciousness_levels = ["まずい", "普通", "美味しい", "とても美味しい", "絶品"]
+
+deliciousness_levels.each do |level|
+  Deliciousness.find_or_create_by!(notation: level)
+end
