@@ -75,13 +75,14 @@ export default function Home() {
 
 		// ファイルの追加
 		if (compressedFile) {
-			formData.append("file", compressedFile);
+			formData.append("file", compressedFile, compressedFile.name);
 		}
 
 		console.log("formData prepared");
 		try {
 			const response = await fetch(getUrl("/v1/ramen"), {
 				method: "POST",
+
 				body: formData, // Content-Type は自動的に設定されるので指定不要
 			});
 			// response の処理...
