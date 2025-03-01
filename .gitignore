@@ -1,5 +1,8 @@
-view.env
+# Mac
 .DS_Store
+
+# Envs
+view.env
 api.env
 magazine.env
 
