@@ -3,13 +3,12 @@
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compressImage } from "@/lib/compressImage";
+import { getUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -30,11 +30,11 @@ export default function Home() {
 			store_name: "",
 			ramen_name: "",
 			file: undefined,
-			delicious: 3,
-			portion: 3,
-			thick: 3,
-			texture: 3,
-			soup: 3,
+			deliciousness_id: 3,
+			portion_id: 3,
+			thick_id: 3,
+			texture_id: 3,
+			soup_id: 3,
 		},
 	});
 
@@ -53,15 +53,26 @@ export default function Home() {
 		}
 	}, [userId, form]);
 
+	const fileDelete = () => {
+		setIsFile(false);
+	};
+
 	const onSubmit = async (data: Post) => {
 		console.log(data);
 		const comppressedFile = await compressImage(data.file);
 		const sendData = { ...data, file: comppressedFile };
 		console.log(sendData);
-	};
-
-	const fileDelete = () => {
-		setIsFile(false);
+		try {
+			const response = await fetch(getUrl("/v1/ramen"), {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(sendData),
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -129,7 +140,7 @@ export default function Home() {
 								/>
 								<FormField
 									control={form.control}
-									name="delicious"
+									name="deliciousness_id"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Delicious</FormLabel>
@@ -151,7 +162,7 @@ export default function Home() {
 								/>
 								<FormField
 									control={form.control}
-									name="portion"
+									name="portion_id"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Portion</FormLabel>
@@ -167,7 +178,7 @@ export default function Home() {
 								/>
 								<FormField
 									control={form.control}
-									name="thick"
+									name="thick_id"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Thick</FormLabel>
@@ -183,7 +194,7 @@ export default function Home() {
 								/>
 								<FormField
 									control={form.control}
-									name="texture"
+									name="texture_id"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Texture</FormLabel>
@@ -199,7 +210,7 @@ export default function Home() {
 								/>
 								<FormField
 									control={form.control}
-									name="soup"
+									name="soup_id"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Soup</FormLabel>
