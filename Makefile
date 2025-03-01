@@ -8,11 +8,6 @@ prod-up:
 	@docker compose -f compose.prod.yml up -d
 	@echo "Nextjs App: http://localhost:3000"
 
-up-view:
-	@echo "Starting Nextjs App..."
-	@docker compose up -d view
-	@echo "Nextjs App: http://localhost:3000"
-
 down:
 	@echo "Stopping Nextjs App..."
 	@docker compose down
@@ -42,6 +37,10 @@ logs-view:
 logs-api:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f api
+
+logs-magazine:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose logs -f magazine
 
 remove-branch:
 	@echo "Removing branch..."
