@@ -119,7 +119,7 @@ export default function Home() {
 								<img
 									src="/ramen/IMG_9358.jpeg"
 									alt="アイコン"
-									className="w-28 h-28 object-cover rounded-full border-4 border-pink-600"
+									className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 								/>
 								<div className="flex flex-col items-center">
 									<div className="p-2 font-extrabold text-gray-800">
