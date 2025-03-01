@@ -9,20 +9,50 @@ export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 	// TODO: サインインまたはサインアップ処理を実装する
 	storeStorageUser(firebaseUser.uid);
 
-	console.log("サインインまたはサインアップが完了しました")
+	try {
+		// TODO: バックエンドが完成したら繋ぎこむ
+		// const res = await fetch(get_url("/v1/users"), {
+		// 	method: "POST",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify({
+		// 		google_id: firebaseUser.uid,
+		// 	}),
+		// });
+		const responseMock = {
+			status: 200,
+			data: {
+				id: "1",
+			},
+		}
+		const res = responseMock;
 
-	// TODO: バックエンドが完成したら繋ぎこむ
-	// const res = await fetch(get_url("/v1/users"), {
-	// 	method: "POST",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 	},
-	// 	body: JSON.stringify({
-	// 		google_id: firebaseUser.uid,
-	// 	}),
-	// });
+		if (res.status === 200) {
+			console.log("ユーザーが存在します")
+		}
+		else if (res.status === 201) {
+			console.log("ユーザーを作成しました");
+		}
+		else if (res.status === 422) {
+			console.log("リクエストが不正です", res);
+			return;
+		}
+		else {
+			console.log("予期せぬエラーが発生しました", res);
+			return;
+		}
 
-	toRoot();
+		const responseJson = res;
+		const uid = responseJson.data.id;
+		storeStorageUser(uid);
+
+		toRoot();
+		return uid;
+	} catch (error) {
+		console.error("エラーが発生しました:", error);
+	}
+
 };
 
 const signUp = async () => {
