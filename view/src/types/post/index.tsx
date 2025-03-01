@@ -20,14 +20,9 @@ const fileSchema = z
 				}
 				return val;
 			},
-			z
-				.instanceof(File)
-				.refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
-					message: "ファイルサイズは最大5MBです",
-				})
-				.refine((file) => IMAGE_TYPES.includes(file.type), {
-					message: ".jpgもしくは.pngのみ可能です",
-				}),
+			z.instanceof(File).refine((file) => IMAGE_TYPES.includes(file.type), {
+				message: ".jpgもしくは.pngのみ可能です",
+			}),
 		),
 	])
 	.refine((file) => file !== null, { message: "必須です" });
