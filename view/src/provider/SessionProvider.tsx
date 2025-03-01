@@ -1,6 +1,5 @@
 "use client";
 import { useEffect } from "react";
-import { userIDStore } from "@/zustand/userIdStore";
 
 export interface SessionProviderProps {
 	children: React.ReactNode;
@@ -14,9 +13,7 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 		}
 
 		const userId = localStorage.getItem("userID");
-
-		console.log("id with LocalStorage", userId);
-
+		
 		if (!userId) {
 			console.log("ログインしてください")
 			window.location.href = "/login";

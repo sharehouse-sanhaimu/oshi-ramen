@@ -13,8 +13,6 @@ type responseJson = {
 };
 
 export const signInOrUp = async (firebaseUser: FirebaseUser) => {
-	console.log("firebaseUser uid", firebaseUser.uid);
-	console.log("firebaseUser displayName", firebaseUser.displayName);
 	try {
 		const res = await fetch(get_url("/v1/users"), {
 			method: "POST",
