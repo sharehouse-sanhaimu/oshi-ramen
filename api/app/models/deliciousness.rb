@@ -1,3 +1,3 @@
 class Deliciousness < ApplicationRecord
-  has_many :ramens
+  has_many :ramen
 end

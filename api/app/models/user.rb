@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  has_many :ramens
+  has_many :ramen
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_01_084735) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_091814) do
   create_table "deliciousnesses", force: :cascade do |t|
     t.string "notation"
     t.datetime "created_at", null: false
@@ -41,7 +41,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_084735) do
     t.string "shop_name"
     t.string "image_url"
     t.integer "deliciousness_id", null: false
-    t.integer "portions_id", null: false
+    t.integer "portion_id", null: false
     t.integer "noodle_texture_id", null: false
     t.integer "noodle_thickness_id", null: false
     t.integer "soup_richness_id", null: false
@@ -53,7 +53,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_084735) do
     t.index ["deliciousness_id"], name: "index_ramen_on_deliciousness_id"
     t.index ["noodle_texture_id"], name: "index_ramen_on_noodle_texture_id"
     t.index ["noodle_thickness_id"], name: "index_ramen_on_noodle_thickness_id"
-    t.index ["portions_id"], name: "index_ramen_on_portions_id"
+    t.index ["portion_id"], name: "index_ramen_on_portion_id"
     t.index ["soup_richness_id"], name: "index_ramen_on_soup_richness_id"
     t.index ["user_id"], name: "index_ramen_on_user_id"
   end
@@ -74,7 +74,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_084735) do
   add_foreign_key "ramen", "deliciousnesses"
   add_foreign_key "ramen", "noodle_textures"
   add_foreign_key "ramen", "noodle_thicknesses"
-  add_foreign_key "ramen", "portions", column: "portions_id"
+  add_foreign_key "ramen", "portions"
   add_foreign_key "ramen", "soup_richnesses"
   add_foreign_key "ramen", "users"
 end

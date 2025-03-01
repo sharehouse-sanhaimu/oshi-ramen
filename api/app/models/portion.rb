@@ -1,3 +1,3 @@
 class Portion < ApplicationRecord
-  has_many :ramens
+  has_many :ramen
 end
