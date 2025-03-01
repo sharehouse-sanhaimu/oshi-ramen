@@ -115,49 +115,55 @@ export default function Home() {
 							<div
 								className={`${isFile ? "hidden" : "flex flex-initial justify-around items-center"}`}
 							>
-								<FormField
-									control={form.control}
-									name="file"
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<div className="relative">
-													{/* カスタムボタンとして画像を表示 */}
-													<label
-														htmlFor="file-input"
-														className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
-													>
-														<img
-															src="/ramen/IMG_9358.jpeg"
-															alt="アイコン"
-															className="w-20 h-20 object-cover rounded-full border-4 border-pink-600"
-														/>
-													</label>
-													{/* 実際のファイル入力は非表示 */}
-													<Input
-														id="file-input"
-														type="file"
-														accept="image/*"
-														className="hidden"
-														onChange={(e) => {
-															const files = e.target.files;
-															field.onChange(files);
-															if (files?.length !== 0) {
-																setIsFile(true);
-															}
-														}}
-													/>
-												</div>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
+								<img
+									src="/ramen/IMG_9358.jpeg"
+									alt="アイコン"
+									className="w-20 h-20 object-cover rounded-full border-4 border-pink-600"
 								/>
 								<div className="flex flex-col items-center">
 									<div className="p-2 font-extrabold text-gray-800">
 										User Name
 									</div>
-									<Button className="p-1 w-24 bg-gray-800">雑誌</Button>
+									<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
+										雑誌印刷
+									</Card>
+									<FormField
+										control={form.control}
+										name="file"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<div className="relative">
+														{/* カスタムボタンとして画像を表示 */}
+														<label
+															htmlFor="file-input"
+															className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
+														>
+															<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
+																投稿
+															</Card>
+														</label>
+
+														{/* 実際のファイル入力は非表示 */}
+														<Input
+															id="file-input"
+															type="file"
+															accept="image/*"
+															className="hidden"
+															onChange={(e) => {
+																const files = e.target.files;
+																field.onChange(files);
+																if (files?.length !== 0) {
+																	setIsFile(true);
+																}
+															}}
+														/>
+													</div>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
 								</div>
 							</div>
 
@@ -168,7 +174,7 @@ export default function Home() {
 										name="store_name"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Store Name</FormLabel>
+												<FormLabel className="text-black">お店の名前</FormLabel>
 												<FormControl>
 													<Input placeholder="お店の名前" {...field} />
 												</FormControl>
@@ -181,7 +187,9 @@ export default function Home() {
 										name="ramen_name"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Ramen Name</FormLabel>
+												<FormLabel className="text-black">
+													ラーメンの名前
+												</FormLabel>
 												<FormControl>
 													<Input placeholder="ラーメンの名前" {...field} />
 												</FormControl>
@@ -194,7 +202,7 @@ export default function Home() {
 										name="deliciousness_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Delicious</FormLabel>
+												<FormLabel className="text-black">おいしさ</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
@@ -213,7 +221,7 @@ export default function Home() {
 										name="portion_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Portion</FormLabel>
+												<FormLabel className="text-black">量</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
@@ -232,7 +240,7 @@ export default function Home() {
 										name="thick_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Thick</FormLabel>
+												<FormLabel className="text-black">太さ</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
@@ -251,7 +259,7 @@ export default function Home() {
 										name="texture_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Texture</FormLabel>
+												<FormLabel className="text-black">麺の硬さ</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
@@ -270,7 +278,9 @@ export default function Home() {
 										name="soup_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Soup</FormLabel>
+												<FormLabel className="text-black">
+													あっさり・こってり
+												</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
