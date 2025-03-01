@@ -32,11 +32,21 @@ export const postSchema = z.object({
 	store_name: z.string(),
 	ramen_name: z.string(),
 	file: fileSchema,
-	delicious: z.number(), // delicious: おいしさ
-	portion: z.number(), // portion: 量
-	thick: z.number(), // thick: 太さ
-	texture: z.number(), // texture: コシ
-	soup: z.number(), // soup: コッテリ
+	delicious: z.preprocess((val) => {
+		return typeof val === "string" ? Number.parseInt(val, 10) : val;
+	}, z.number()),
+	portion: z.preprocess((val) => {
+		return typeof val === "string" ? Number.parseInt(val, 10) : val;
+	}, z.number()),
+	thick: z.preprocess((val) => {
+		return typeof val === "string" ? Number.parseInt(val, 10) : val;
+	}, z.number()),
+	texture: z.preprocess((val) => {
+		return typeof val === "string" ? Number.parseInt(val, 10) : val;
+	}, z.number()),
+	soup: z.preprocess((val) => {
+		return typeof val === "string" ? Number.parseInt(val, 10) : val;
+	}, z.number()),
 });
 
 export type Post = z.infer<typeof postSchema>;
