@@ -1,7 +1,7 @@
-from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image, ImageFile
+from models.ramen_info import RamenInfo
+from PIL import Image
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
@@ -17,16 +17,10 @@ pdfmetrics.registerFont(
 )
 
 
-@dataclass
-class RamenInfo:
-    store: str
-    name: str
-
-
-def create_ramen_presentation(
+def make_magazine(
     output_path: str,
-    images: list[Path],
-    bg_path: Path,
+    images: list[str],
+    bg_path: str,
     redar_charts: list[Path],  # type: ignore
     ramen_info: list[RamenInfo],
 ):
@@ -201,9 +195,9 @@ if __name__ == "__main__":
     img_dir = Path("/Users/iwakiaoiyou/oshi-ramen/magazine/imgs/round-square")
 
     images = [
-        img_dir / "IMG_9358.png",
-        img_dir / "IMG_9437.png",
-        img_dir / "IMG_9495.png",
+        str(img_dir / "IMG_9358.png"),
+        str(img_dir / "IMG_9437.png"),
+        str(img_dir / "IMG_9495.png"),
     ]
 
     # レダーチャートのパスを指定
@@ -222,7 +216,7 @@ if __name__ == "__main__":
     ]
 
     # 背景画像のパスを指定
-    bgimg_path = Path(
+    bgimg_path = (
         "/Users/iwakiaoiyou/oshi-ramen/magazine/assets/ramen-magazine-template.png"
     )
     out_path = "/Users/iwakiaoiyou/oshi-ramen/magazine/out/ramen_presentation.pdf"
