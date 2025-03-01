@@ -11,11 +11,7 @@ class UploadToS3
 
     key = "uploads/#{SecureRandom.uuid}_#{file.original_filename}"
 
-    content_type = (
-      file.content_type ||
-      MIME::Types.type_for(file.original_filename).first&.content_type ||
-      'application/octet-stream'
-    )
+    content_type = file.content_type || 'application/octet-stream'
 
     s3.put_object(
       bucket: ENV['AWS_BUCKET_NAME'],
@@ -23,7 +19,20 @@ class UploadToS3
       body: file,
       content_type: content_type
     )
+    {
+      key: key,
+      url: generate_presigned_url(key)
+    }
+  end
 
-    "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{key}"
+  def self.generate_presigned_url(key, expires_in: 3600)
+    s3 = Aws::S3::Resource.new(
+      region: ENV['AWS_REGION'],
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    )
+
+    obj = s3.bucket(ENV['AWS_BUCKET_NAME']).object(key)
+    obj.presigned_url(:get, expires_in: expires_in)
   end
 end

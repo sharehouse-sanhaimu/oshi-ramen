@@ -15,7 +15,8 @@ module V1
         render json: ResponseDto.new(
           message: 'Post created successfully',
           data: {
-            id: ramen.id
+            id: ramen.id,
+            url: ramen.image_url
           }
         ), status: :created
       else
@@ -31,13 +32,14 @@ module V1
     # @return [User] ボディパラメータ
     def post_create_params
       file = params[:file]
-      image_url = file.present? ? UploadToS3.call(file) : ""
+      s3_data = file.present? ? UploadToS3.call(file) : {key: "", image_url: ""}
       Ramen.new(
         {
           user_id: params.require(:user_id),
           name: params[:name] || "",
           store_name: params[:store_name] || "",
-          image_url: image_url,
+          image_url: s3_data[:image_url],
+          key: s3_data[:key],
           deliciousness_id: params[:deliciousness_id].to_i.presence || "",
           portion_id: params[:portion_id].to_i.presence || "",
           noodle_texture_id: params[:noodle_texture_id].to_i.presence || "",
