@@ -33,10 +33,7 @@ export function RamenModal({
 	// モーダル外クリックで閉じる処理
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
-			if (
-				modalRef.current &&
-				!modalRef.current.contains(event.target as Node)
-			) {
+			if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
 				setIsOpenModal(false);
 			}
 		}

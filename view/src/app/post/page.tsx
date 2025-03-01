@@ -80,13 +80,7 @@ export default function App() {
 						<FormItem>
 							<FormLabel>Delicious</FormLabel>
 							<FormControl>
-								<Input
-									type="range"
-									min={1}
-									max={5}
-									placeholder="おいしさ"
-									{...field}
-								/>
+								<Input type="range" min={1} max={5} placeholder="おいしさ" {...field} />
 							</FormControl>
 							{/* <FormDescription>
 								This is your public display name.
@@ -102,13 +96,7 @@ export default function App() {
 						<FormItem>
 							<FormLabel>Portion</FormLabel>
 							<FormControl>
-								<Input
-									type="range"
-									min={1}
-									max={5}
-									placeholder="量"
-									{...field}
-								/>
+								<Input type="range" min={1} max={5} placeholder="量" {...field} />
 							</FormControl>
 							{/* <FormDescription>
 								This is your public display name.
@@ -124,13 +112,7 @@ export default function App() {
 						<FormItem>
 							<FormLabel>Thick</FormLabel>
 							<FormControl>
-								<Input
-									type="range"
-									min={1}
-									max={5}
-									placeholder="太さ"
-									{...field}
-								/>
+								<Input type="range" min={1} max={5} placeholder="太さ" {...field} />
 							</FormControl>
 							{/* <FormDescription>
 								This is your public display name.
@@ -146,13 +128,7 @@ export default function App() {
 						<FormItem>
 							<FormLabel>Texture</FormLabel>
 							<FormControl>
-								<Input
-									type="range"
-									min={1}
-									max={5}
-									placeholder="コシ"
-									{...field}
-								/>
+								<Input type="range" min={1} max={5} placeholder="コシ" {...field} />
 							</FormControl>
 							{/* <FormDescription>
 								This is your public display name.
@@ -168,13 +144,7 @@ export default function App() {
 						<FormItem>
 							<FormLabel>Soup</FormLabel>
 							<FormControl>
-								<Input
-									type="range"
-									min={1}
-									max={5}
-									placeholder="コッテリ"
-									{...field}
-								/>
+								<Input type="range" min={1} max={5} placeholder="コッテリ" {...field} />
 							</FormControl>
 							{/* <FormDescription>
 								This is your public display name.

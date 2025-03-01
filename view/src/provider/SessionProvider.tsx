@@ -15,12 +15,12 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 		const userId = localStorage.getItem("userID");
 
 		if (!userId) {
-			console.log("ログインしてください")
+			console.log("ログインしてください");
 			window.location.href = "/login";
 			return;
 		}
 
-		console.log("既にログインしています")
+		console.log("既にログインしています");
 	}, []);
 
 	return <>{children}</>;
