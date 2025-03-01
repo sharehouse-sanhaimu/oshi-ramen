@@ -13,13 +13,16 @@ const firebaseConfig = {
 	storageBucket: process.env.NEXT_PUBLIC_STORAGEBUCKET,
 	messagingSenderId: process.env.NEXT_PUBLIC_MESSAGINGSENDERID,
 	appId: process.env.NEXT_PUBLIC_APPID,
+	measurementId: process.env.NEXT_PUBLIC_MEASUREMENTID,
 };
 
 const provider = new GoogleAuthProvider();
 async function signUp() {
+	console.log("signUp");
 	const auth = getAuth();
 	signInWithPopup(auth, provider)
 		.then((result) => {
+			console.log("hello");
 			const credential = GoogleAuthProvider.credentialFromResult(result);
 			const token = credential?.accessToken;
 			const user = result.user;
