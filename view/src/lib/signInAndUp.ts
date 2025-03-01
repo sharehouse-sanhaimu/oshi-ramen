@@ -1,5 +1,6 @@
 import type { User as FirebaseUser } from "@firebase/auth";
 import { get_url } from "@/lib/utils";
+import { userIDStore } from "@/zustand/userIdStore";
 
 const storeStorageUser = (uid: string) => {
 	localStorage.setItem("userID", uid);
@@ -46,6 +47,8 @@ export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 		const responseJson = res;
 		const uid = responseJson.data.id;
 		storeStorageUser(uid);
+		const setID	= userIDStore.getState().setID;
+		setID(uid);
 
 		toRoot();
 		return uid;
