@@ -13,7 +13,7 @@ LINE_HEIGHT = 28
 IMAGE_SIZE = 2.75
 
 pdfmetrics.registerFont(
-    TTFont("IPAexGothic", "/Users/iwakiaoiyou/oshi-ramen/magazine/fonts/ipaexg.ttf")
+    TTFont("IPAexGothic", "fonts/ipaexg.ttf")
 )
 
 
@@ -27,10 +27,6 @@ def make_magazine(
     FONT_SIZE = 24
     LINE_HEIGHT = 28
     IMAGE_SIZE = 2.75
-
-    pdfmetrics.registerFont(
-        TTFont("IPAexGothic", "/Users/iwakiaoiyou/oshi-ramen/magazine/fonts/ipaexg.ttf")
-    )
 
     c = canvas.Canvas(output_path, pagesize=landscape(A4))
     width, height = landscape(A4)

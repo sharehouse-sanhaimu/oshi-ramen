@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from pathlib import Path
-from magazine.models.ramen_info import RamenInfo
+
+from models.ramen_info import RamenInfo
+
 
 @dataclass
 class MagazineInfo:
