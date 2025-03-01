@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: MyString
+  shop_name: MyString
+  image_url: MyString
+  deliciousness: one
+  portions: one
+  noodle_texture: one
+  noodle_thickness: one
+  soup_richness: one
+  price: 1
+  description: MyString
+  address: MyString
+
+two:
+  user: two
+  name: MyString
+  shop_name: MyString
+  image_url: MyString
+  deliciousness: two
+  portions: two
+  noodle_texture: two
+  noodle_thickness: two
+  soup_richness: two
+  price: 1
+  description: MyString
+  address: MyString
