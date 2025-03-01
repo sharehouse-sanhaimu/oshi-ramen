@@ -11,8 +11,12 @@
 ARG RUBY_VERSION=3.4.1
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+# 必要なディレクトリを作成
+RUN mkdir -p /usr/local/bundle/bin
+RUN chmod 777 /usr/local/bundle/bin
+
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /api
 
 # Install base packages
 RUN apt-get update -qq && \
@@ -23,7 +27,8 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="development" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    BUNDLE_FROZEN="false"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -35,7 +40,7 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN bundle install --no-deployment && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
@@ -53,16 +58,19 @@ FROM base
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
+COPY --from=build /api /api
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails /api
 USER 1000:1000
 
+# rails のシンボリックリンクを作成
+RUN ln -s /usr/local/bundle/ruby/3.4.0/bin/rails /usr/local/bundle/bin/rails
+
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/api/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
 CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "8000"]
