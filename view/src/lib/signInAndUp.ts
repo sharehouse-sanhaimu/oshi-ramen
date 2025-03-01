@@ -8,6 +8,8 @@ const storeStorageUser = (user: DBUser) => {
 export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 	// TODO: サインインまたはサインアップ処理を実装する
 	console.log("サインインまたはサインアップが完了しました")
+
+	toRoot();
 };
 
 const signUp = async (user: User) => {
