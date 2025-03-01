@@ -13,11 +13,16 @@ module V1
 
       user = post_create_params
 
+      uploaded_file = GetImageFromUrl.call(user.icon_url)
+
+      s3_result = UploadToS3.call(uploaded_file)
+      user.icon_url = s3_result.url
       if user.save
         render json: ResponseDto.new(
           message: 'User created successfully',
           data: {
-            id: user.id
+            id: user.id,
+            url: user.icon_url
           }
         ), status: :created
       else
@@ -51,7 +56,8 @@ module V1
       User.new(
       {
         google_id: params.require(:google_id),
-        nickname: params[:nickname] || ""
+        nickname: params[:nickname] || "",
+        icon_url: params[:icon_url] || ""
       })
     end
   end
