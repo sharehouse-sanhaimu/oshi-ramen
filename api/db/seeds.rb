@@ -10,6 +10,7 @@
 deliciousness_levels = ["まずい", "普通", "美味しい", "とても美味しい", "絶品"]
 portions = ["少なめ", "普通", "多め", "大盛り", "特盛"]
 noodle_textures = ["やわらかい", "普通", "少し硬め", "硬め", "バリカタ"]
+noodle_thicknesses = ["極細", "細麺", "中細麺", "中太麺", "極太"]
 
 deliciousness_levels.each do |level|
   Deliciousness.find_or_create_by!(notation: level)
@@ -21,4 +22,8 @@ end
 
 noodle_textures.each do |texture|
   NoodleTexture.find_or_create_by!(notation: texture)
+end
+
+noodle_thicknesses.each do |thickness|
+  NoodleThickness.find_or_create_by!(notation: thickness)
 end
