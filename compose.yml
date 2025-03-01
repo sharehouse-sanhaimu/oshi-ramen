@@ -4,8 +4,11 @@ services:
       context: ./view
     volumes:
       - ./view:/app
+      - ./view/.pnpm-store:/app/.pnpm-store
     ports:
       - "3000:3000"
+    command: ["sh", "-c", "pnpm install && pnpm dev"]
+
   api:
     build:
       context: ./api
