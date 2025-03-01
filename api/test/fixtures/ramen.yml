@@ -3,7 +3,7 @@
 one:
   user: one
   name: MyString
-  shop_name: MyString
+  store_name: MyString
   image_url: MyString
   deliciousness: one
   portions: one
@@ -17,7 +17,7 @@ one:
 two:
   user: two
   name: MyString
-  shop_name: MyString
+  store_name: MyString
   image_url: MyString
   deliciousness: two
   portions: two

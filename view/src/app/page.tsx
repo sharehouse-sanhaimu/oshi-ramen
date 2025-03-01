@@ -1,6 +1,7 @@
 "use client";
 
 import { RamenGallery } from "@/components/RamenGallery";
+
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -11,7 +12,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { compressImage } from "@/lib/compressImage";
 import { initialRamenList } from "@/lib/mockData";
+import { getUrl } from "@/lib/utils";
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,29 +22,30 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Home() {
-	const [userId, setUserId] = useState<string | null>(null);
+	const [userId, setUserId] = useState<number | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const form = useForm<Post>({
 		resolver: zodResolver(postSchema),
 		defaultValues: {
-			user_id: "",
+			user_id: 0,
 			store_name: "",
 			ramen_name: "",
 			file: undefined,
-			delicious: 3,
-			portion: 3,
-			thick: 3,
-			texture: 3,
-			soup: 3,
+			deliciousness_id: 3,
+			portion_id: 3,
+			thick_id: 3,
+			texture_id: 3,
+			soup_id: 3,
 		},
 	});
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
+		const userIDNum = Number(userID);
 		if (userID) {
-			setUserId(userID);
+			setUserId(userIDNum);
 		} else {
 			setUserId(null);
 		}
@@ -52,10 +56,6 @@ export default function Home() {
 			form.setValue("user_id", userId);
 		}
 	}, [userId, form]);
-
-	const onSubmit = (data: Post) => {
-		console.log(data);
-	};
 
 	const fileDelete = () => {
 		setIsFile(false);
@@ -69,7 +69,37 @@ export default function Home() {
 		fileDelete();
 	};
 
-	console.log(form.watch("file"));
+	const onSubmit = async (data: Post) => {
+		console.log(data);
+		const compressedFile = await compressImage(data.file);
+		const formData = new FormData();
+
+		// 必要なフィールドを FormData に追加
+		formData.append("user_id", data.user_id.toString());
+		formData.append("store_name", data.store_name);
+		formData.append("name", data.ramen_name);
+		formData.append("deliciousness_id", data.deliciousness_id.toString());
+		formData.append("portion_id", data.portion_id.toString());
+		formData.append("noodle_thickness_id", data.thick_id.toString());
+		formData.append("noodle_texture_id", data.texture_id.toString());
+		formData.append("soup_richness_id", data.soup_id.toString());
+
+		// ファイルの追加
+		if (compressedFile) {
+			formData.append("file", compressedFile);
+		}
+
+		console.log("formData prepared");
+		try {
+			const response = await fetch(getUrl("/v1/ramen"), {
+				method: "POST",
+				body: formData, // Content-Type は自動的に設定されるので指定不要
+			});
+			// response の処理...
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	return (
 		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-50">
@@ -87,7 +117,10 @@ export default function Home() {
 											<FormControl>
 												<div className="relative">
 													{/* カスタムボタンとして画像を表示 */}
-													<label htmlFor="file-input" className="cursor-pointer">
+													<label
+														htmlFor="file-input"
+														className="cursor-pointer"
+													>
 														<img
 															src="/ramen/IMG_9358.jpeg"
 															alt="アイコン"
@@ -146,7 +179,7 @@ export default function Home() {
 									/>
 									<FormField
 										control={form.control}
-										name="delicious"
+										name="deliciousness_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Delicious</FormLabel>
@@ -165,12 +198,18 @@ export default function Home() {
 									/>
 									<FormField
 										control={form.control}
-										name="portion"
+										name="portion_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Portion</FormLabel>
 												<FormControl>
-													<Input type="range" min={1} max={5} placeholder="量" {...field} />
+													<Input
+														type="range"
+														min={1}
+														max={5}
+														placeholder="量"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -178,7 +217,7 @@ export default function Home() {
 									/>
 									<FormField
 										control={form.control}
-										name="thick"
+										name="thick_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Thick</FormLabel>
@@ -197,7 +236,7 @@ export default function Home() {
 									/>
 									<FormField
 										control={form.control}
-										name="texture"
+										name="texture_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Texture</FormLabel>
@@ -216,7 +255,7 @@ export default function Home() {
 									/>
 									<FormField
 										control={form.control}
-										name="soup"
+										name="soup_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Soup</FormLabel>

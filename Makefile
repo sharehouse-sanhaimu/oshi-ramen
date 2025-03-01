@@ -1,16 +1,26 @@
+build:
+	@echo "Building..."
+	@docker compose build
+	@echo "built successfully"
+
 up:
 	@echo "Starting Nextjs App..."
 	@docker compose up -d
 	@echo "Nextjs App: http://localhost:3000"
 
+prod-build:
+	@echo "Building..."
+	@docker compose -f compose.prod.yml build
+	@docker compose -f compose.prod.yml run --rm view pnpm install
+	@docker compose -f compose.prod.yml run --rm view pnpm run build
+	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:reset
+	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:migrate
+	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:seed
+	@echo "built successfully"
+
 prod-up:
 	@echo "Starting Nextjs App..."
 	@docker compose -f compose.prod.yml up -d
-	@echo "Nextjs App: http://localhost:3000"
-
-up-view:
-	@echo "Starting Nextjs App..."
-	@docker compose up -d view
 	@echo "Nextjs App: http://localhost:3000"
 
 down:
@@ -43,6 +53,10 @@ logs-api:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f api
 
+logs-magazine:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose logs -f magazine
+
 remove-branch:
 	@echo "Removing branch..."
 	@git remote prune origin
@@ -53,3 +67,5 @@ format:
 	@echo "Formatting code..."
 	@docker compose exec -it view pnpm run format
 	@echo "Code formatted"
+
+
