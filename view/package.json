@@ -11,6 +11,8 @@
 	},
 	"dependencies": {
 		"@firebase/auth": "^1.9.1",
+		"@hookform/resolvers": "^4.1.2",
+		"@radix-ui/react-label": "^2.1.2",
 		"@radix-ui/react-slot": "^1.1.2",
 		"@radix-ui/themes": "^3.2.1",
 		"class-variance-authority": "^0.7.1",
@@ -20,9 +22,12 @@
 		"next": "15.2.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
+		"react-firebase-hooks": "^5.1.1",
+		"react-hook-form": "^7.54.2",
 		"tailwind-merge": "^3.0.2",
 		"tailwindcss-animate": "^1.0.7",
-		"zustand": "^5.0.3"
+		"zustand": "^5.0.3",
+		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
