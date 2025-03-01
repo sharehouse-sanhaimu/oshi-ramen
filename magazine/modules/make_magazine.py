@@ -135,23 +135,6 @@ def make_magazine(
 
     c.drawText(text_object)
 
-    # images3を右側中央に配置、その他はimages1と同じ
-    image_path = images[2]
-    image = Image.open(image_path)
-    image_width, image_height = image.size
-    aspect_ratio = image_width / image_height
-    new_height = IMAGE_SIZE * inch
-    new_width = new_height * aspect_ratio
-    x_position = width - new_width - 0.5 * inch  # ここでX座標を変更
-    y_position = height - 2 * new_height - 0.5 * inch  # ここでY座標を変更
-    c.drawImage(
-        image_path,
-        x_position,
-        y_position,
-        width=new_width,
-        height=new_height,
-        mask="auto",
-    )
 
     # Chart3を右下に配置
     image_path = redar_charts[2]
@@ -161,7 +144,25 @@ def make_magazine(
     new_height = CHART_SIZE * inch
     new_width = new_height * aspect_ratio
     x_position = width - new_width - 0.5 * inch
-    y_position = 0.25 * inch
+    y_position = 0
+    c.drawImage(
+        image_path,
+        x_position,
+        y_position,
+        width=new_width,
+        height=new_height,
+        mask="auto",
+    )
+    
+    # images3を右側中央に配置、その他はimages1と同じ
+    image_path = images[2]
+    image = Image.open(image_path)
+    image_width, image_height = image.size
+    aspect_ratio = image_width / image_height
+    new_height = IMAGE_SIZE * inch
+    new_width = new_height * aspect_ratio
+    x_position = width - new_width - 0.5 * inch  # ここでX座標を変更
+    y_position = height - 2 * new_height - 0.2 * inch  # ここでY座標を変更
     c.drawImage(
         image_path,
         x_position,
