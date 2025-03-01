@@ -38,7 +38,7 @@ module V1
           user_id: params.require(:user_id),
           name: params[:name] || "",
           store_name: params[:store_name] || "",
-          image_url: s3_data[:image_url],
+          image_url: s3_data[:url],
           key: s3_data[:key],
           deliciousness_id: params[:deliciousness_id].to_i.presence || "",
           portion_id: params[:portion_id].to_i.presence || "",

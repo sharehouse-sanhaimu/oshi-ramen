@@ -21,18 +21,7 @@ class UploadToS3
     )
     {
       key: key,
-      url: generate_presigned_url(key)
+      url: "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{key}"
     }
-  end
-
-  def self.generate_presigned_url(key, expires_in: 3600)
-    s3 = Aws::S3::Resource.new(
-      region: ENV['AWS_REGION'],
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    )
-
-    obj = s3.bucket(ENV['AWS_BUCKET_NAME']).object(key)
-    obj.presigned_url(:get, expires_in: expires_in)
   end
 end
