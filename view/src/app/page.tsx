@@ -66,12 +66,12 @@ export default function Home() {
 		// 必要なフィールドを FormData に追加
 		formData.append("user_id", data.user_id.toString());
 		formData.append("store_name", data.store_name);
-		formData.append("ramen_name", data.ramen_name);
+		formData.append("name", data.ramen_name);
 		formData.append("deliciousness_id", data.deliciousness_id.toString());
 		formData.append("portion_id", data.portion_id.toString());
-		formData.append("thick_id", data.thick_id.toString());
-		formData.append("texture_id", data.texture_id.toString());
-		formData.append("soup_id", data.soup_id.toString());
+		formData.append("noodle_thickness_id", data.thick_id.toString());
+		formData.append("noodle_texture_id", data.texture_id.toString());
+		formData.append("soup_richness_id", data.soup_id.toString());
 
 		// ファイルの追加
 		if (compressedFile) {
