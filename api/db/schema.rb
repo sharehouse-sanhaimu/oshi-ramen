@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_01_091814) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_122730) do
   create_table "deliciousnesses", force: :cascade do |t|
     t.string "notation"
     t.datetime "created_at", null: false
@@ -38,7 +38,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_091814) do
   create_table "ramen", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "name"
-    t.string "shop_name"
+    t.string "store_name"
     t.string "image_url"
     t.integer "deliciousness_id", null: false
     t.integer "portion_id", null: false

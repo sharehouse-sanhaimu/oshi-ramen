@@ -47,7 +47,7 @@ soup_richness = SoupRichness.find_by(notation: "普通")
 Ramen.find_or_create_by!(
   user_id: user.id,
   name: "醤油ラーメン",
-  shop_name: "ラーメン一番",
+  store_name: "ラーメン一番",
   image_url: "https://example.com/ramen.jpg",
   deliciousness_id: deliciousness.id,
   noodle_texture_id: noodle_texture.id,
