@@ -114,12 +114,12 @@ export default function Home() {
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<div
-								className={`${isFile ? "hidden" : "flex flex-initial justify-around items-center"}`}
+								className={`${isFile ? "hidden" : "flex flex-initial justify-evenly items-center"}`}
 							>
 								<img
 									src="/ramen/IMG_9358.jpeg"
 									alt="アイコン"
-									className="w-20 h-20 object-cover rounded-full border-4 border-pink-600"
+									className="w-28 h-28 object-cover rounded-full border-4 border-pink-600"
 								/>
 								<div className="flex flex-col items-center">
 									<div className="p-2 font-extrabold text-gray-800">
