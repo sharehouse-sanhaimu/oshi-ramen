@@ -44,3 +44,8 @@ remove-branch:
 	@git remote prune origin
 	@git branch | xargs git branch -d
 	@echo "Branch removed"
+
+format:
+	@echo "Formatting code..."
+	@docker compose exec -it view pnpm run format
+	@echo "Code formatted"
