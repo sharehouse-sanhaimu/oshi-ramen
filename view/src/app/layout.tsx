@@ -20,10 +20,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<SessionProvider>
-			<html lang="en">
-				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-				>
+			<html lang="ja">
+				<body className={`${inter.className} min-h-screen flex flex-col`}>
 					{children}
 				</body>
 			</html>
