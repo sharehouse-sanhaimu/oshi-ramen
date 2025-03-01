@@ -6,47 +6,57 @@ const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
 	return +result.toFixed(decimalsNum);
 };
 
-const IMAGE_TYPES = ["image/jpg", "image/png"];
+const IMAGE_TYPES = ["image/jpeg", "image/png"];
 const MAX_IMAGE_SIZE = 5; // 5MB
 
-const fileSchema = z.object({
-	file: z
-		// z.inferでSchemaを定義したときに型がつくようにするため
-		.custom<FileList>()
-		// 必須にしたい場合
-		.refine((file) => file.length !== 0, { message: "必須です" })
-		// このあとのrefine()で扱いやすくするために整形
-		.transform((file) => file[0])
-		// ファイルサイズを制限したい場合
-		.refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
-			message: "ファイルサイズは最大5MBです",
-		})
-		// 画像形式を制限したい場合
-		.refine((file) => IMAGE_TYPES.includes(file.type), {
-			message: ".jpgもしくは.pngのみ可能です",
-		}),
-});
+// unionを使ってnullも許容した上で、後で必須チェックを行う
+const fileSchema = z
+	.union([
+		z.null(),
+		z.preprocess(
+			(val) => {
+				if (val instanceof FileList && val.length > 0) {
+					return val[0];
+				}
+				return val;
+			},
+			z
+				.instanceof(File)
+				.refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
+					message: "ファイルサイズは最大5MBです",
+				})
+				.refine((file) => IMAGE_TYPES.includes(file.type), {
+					message: ".jpgもしくは.pngのみ可能です",
+				}),
+		),
+	])
+	.refine((file) => file !== null, { message: "必須です" });
 
 export const postSchema = z.object({
 	user_id: z.string(),
 	store_name: z.string(),
 	ramen_name: z.string(),
 	file: fileSchema,
-	delicious: z.preprocess((val) => {
-		return typeof val === "string" ? Number.parseInt(val, 10) : val;
-	}, z.number()),
-	portion: z.preprocess((val) => {
-		return typeof val === "string" ? Number.parseInt(val, 10) : val;
-	}, z.number()),
-	thick: z.preprocess((val) => {
-		return typeof val === "string" ? Number.parseInt(val, 10) : val;
-	}, z.number()),
-	texture: z.preprocess((val) => {
-		return typeof val === "string" ? Number.parseInt(val, 10) : val;
-	}, z.number()),
-	soup: z.preprocess((val) => {
-		return typeof val === "string" ? Number.parseInt(val, 10) : val;
-	}, z.number()),
+	delicious: z.preprocess(
+		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
+		z.number(),
+	),
+	portion: z.preprocess(
+		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
+		z.number(),
+	),
+	thick: z.preprocess(
+		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
+		z.number(),
+	),
+	texture: z.preprocess(
+		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
+		z.number(),
+	),
+	soup: z.preprocess(
+		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
+		z.number(),
+	),
 });
 
 export type Post = z.infer<typeof postSchema>;
