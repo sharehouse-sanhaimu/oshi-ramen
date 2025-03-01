@@ -24,7 +24,7 @@ DEVICE = os.getenv("PRINT_DEVICE")
 print("DEVICE:", DEVICE)
 
 
-def print_pdf(path):
+def print_magazine(path):
     auth = base64.b64encode((CLIENT_ID + ":" + SECRET).encode()).decode()
 
     query_param = {"grant_type": "password", "username": DEVICE, "password": ""}
@@ -178,4 +178,4 @@ def print_pdf(path):
 
 
 if __name__ == "__main__":
-    print_pdf("./out/ramen_presentation.pdf")
+    print_magazine("./out/output_page_1.jpg")

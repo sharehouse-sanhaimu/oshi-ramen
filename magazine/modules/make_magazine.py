@@ -13,8 +13,8 @@ from reportlab.pdfgen import canvas
 FONT_SIZE = 24
 LINE_HEIGHT = 28
 IMAGE_SIZE = 2.75
-BASE_PATH = "/Users/iwakiaoiyou/oshi-ramen/magazine/"
-pdfmetrics.registerFont(TTFont("IPAexGothic", BASE_PATH + "fonts/ipaexg.ttf"))
+# BASE_PATH = "/Users/iwakiaoiyou/oshi-ramen/magazine/"
+pdfmetrics.registerFont(TTFont("IPAexGothic", "fonts/ipaexg.ttf"))
 
 
 def make_magazine(
