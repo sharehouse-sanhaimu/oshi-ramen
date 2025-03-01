@@ -3,6 +3,7 @@
 import { RamenGallery } from "@/components/RamenGallery";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -105,13 +106,15 @@ export default function Home() {
 	};
 
 	return (
-		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-50">
+		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-emerald-100 via-yellow-100 to-amber-100">
 			{/* スマホサイズに制限するコンテナ */}
 			<div className="w-full mx-auto">
 				<div className="flex flex-col">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							<div className={`${isFile ? "hidden" : ""}`}>
+							<div
+								className={`${isFile ? "hidden" : "flex flex-initial justify-around items-center"}`}
+							>
 								<FormField
 									control={form.control}
 									name="file"
@@ -150,6 +153,12 @@ export default function Home() {
 										</FormItem>
 									)}
 								/>
+								<div className="flex flex-col items-center">
+									<div className="p-2 font-extrabold text-gray-800">
+										User Name
+									</div>
+									<Button className="p-1 w-24 bg-gray-800">雑誌</Button>
+								</div>
 							</div>
 
 							{isFile ? (
