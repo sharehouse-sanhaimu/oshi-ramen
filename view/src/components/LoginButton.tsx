@@ -19,6 +19,7 @@ const firebaseConfig = {
 const provider = new GoogleAuthProvider();
 async function signUp() {
 	const auth = getAuth();
+
 	signInWithPopup(auth, provider)
 		.then((result) => {
 			const credential = GoogleAuthProvider.credentialFromResult(result);
