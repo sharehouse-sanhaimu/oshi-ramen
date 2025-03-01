@@ -1,5 +1,7 @@
+import sys
 from pathlib import Path
 
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from models.ramen_info import RamenInfo
 from PIL import Image
 from reportlab.lib.pagesizes import A4, landscape
@@ -12,9 +14,7 @@ FONT_SIZE = 24
 LINE_HEIGHT = 28
 IMAGE_SIZE = 2.75
 BASE_PATH = "/Users/iwakiaoiyou/oshi-ramen/magazine/"
-pdfmetrics.registerFont(
-    TTFont("IPAexGothic", BASE_PATH + "fonts/ipaexg.ttf")
-)
+pdfmetrics.registerFont(TTFont("IPAexGothic", BASE_PATH + "fonts/ipaexg.ttf"))
 
 
 def make_magazine(
@@ -135,7 +135,6 @@ def make_magazine(
 
     c.drawText(text_object)
 
-
     # Chart3を右下に配置
     image_path = redar_charts[2]
     image = Image.open(image_path)
@@ -153,7 +152,7 @@ def make_magazine(
         height=new_height,
         mask="auto",
     )
-    
+
     # images3を右側中央に配置、その他はimages1と同じ
     image_path = images[2]
     image = Image.open(image_path)
