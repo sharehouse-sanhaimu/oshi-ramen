@@ -11,9 +11,9 @@ from reportlab.pdfgen import canvas
 FONT_SIZE = 24
 LINE_HEIGHT = 28
 IMAGE_SIZE = 2.75
-
+BASE_PATH = "/Users/iwakiaoiyou/oshi-ramen/magazine/"
 pdfmetrics.registerFont(
-    TTFont("IPAexGothic", "fonts/ipaexg.ttf")
+    TTFont("IPAexGothic", BASE_PATH + "fonts/ipaexg.ttf")
 )
 
 
@@ -59,7 +59,7 @@ def make_magazine(
     image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
-    new_height = 2 * inch
+    new_heighmake_magazinet = 2 * inch
     new_width = new_height * aspect_ratio
     x_position = 0.5 * inch
     y_position = 0.25 * inch
@@ -217,7 +217,7 @@ if __name__ == "__main__":
     )
     out_path = "/Users/iwakiaoiyou/oshi-ramen/magazine/out/ramen_presentation.pdf"
 
-    create_ramen_presentation(
+    make_magazine(
         out_path,
         images,
         bgimg_path,
