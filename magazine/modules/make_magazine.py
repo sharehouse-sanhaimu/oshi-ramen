@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
     # 背景画像のパスを指定
     bgimg_path = (
-        "/Users/iwakiaoiyou/oshi-ramen/magazine/assets/ramen-magazine-template.png"
+        "/Users/iwakiaoiyou/oshi-ramen/magazine/assets/ramen-magazine-template-2.png"
     )
     out_path = "/Users/iwakiaoiyou/oshi-ramen/magazine/out/ramen_presentation.pdf"
 
