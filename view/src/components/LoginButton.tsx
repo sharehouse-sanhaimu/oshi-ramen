@@ -13,6 +13,7 @@ const firebaseConfig = {
 	storageBucket: process.env.NEXT_PUBLIC_STORAGEBUCKET,
 	messagingSenderId: process.env.NEXT_PUBLIC_MESSAGINGSENDERID,
 	appId: process.env.NEXT_PUBLIC_APPID,
+	measurementId: process.env.NEXT_PUBLIC_MEASUREMENTID,
 };
 
 const provider = new GoogleAuthProvider();
@@ -28,6 +29,7 @@ async function signUp() {
 			signInOrUp(user);
 		})
 		.catch((error) => {
+			console.log("error");
 			// Handle Errors here.
 			const errorCode = error.code;
 			const errorMessage = error.message;
