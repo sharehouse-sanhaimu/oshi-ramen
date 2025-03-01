@@ -107,7 +107,7 @@ export default function Home() {
 	return (
 		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-50">
 			{/* スマホサイズに制限するコンテナ */}
-			<div className="max-w-sm w-full mx-auto">
+			<div className="w-full mx-auto">
 				<div className="flex flex-col">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -122,7 +122,7 @@ export default function Home() {
 													{/* カスタムボタンとして画像を表示 */}
 													<label
 														htmlFor="file-input"
-														className="cursor-pointer"
+														className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
 													>
 														<img
 															src="/ramen/IMG_9358.jpeg"
