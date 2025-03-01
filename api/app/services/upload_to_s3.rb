@@ -13,7 +13,6 @@ class UploadToS3
       bucket: ENV['AWS_BUCKET_NAME'],
       key: key,
       body: file,
-      acl: 'public-read'
     )
 
     "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{key}"
