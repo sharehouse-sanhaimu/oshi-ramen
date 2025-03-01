@@ -8,7 +8,12 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 deliciousness_levels = ["まずい", "普通", "美味しい", "とても美味しい", "絶品"]
+portions = ["少なめ", "普通", "多め", "大盛り", "特盛"]
 
 deliciousness_levels.each do |level|
   Deliciousness.find_or_create_by!(notation: level)
+end
+
+portions.each do |portion|
+  Portion.find_or_create_by!(notation: portion)
 end

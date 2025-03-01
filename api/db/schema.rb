@@ -10,8 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_01_083410) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_083826) do
   create_table "deliciousnesses", force: :cascade do |t|
+    t.string "notation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "portions", force: :cascade do |t|
     t.string "notation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
