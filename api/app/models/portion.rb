@@ -1,3 +1,3 @@
 class Portion < ApplicationRecord
-  has_many :ramen
+  has_many :ramen, class_name: "Ramen"
 end
