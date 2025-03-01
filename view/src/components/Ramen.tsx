@@ -25,7 +25,7 @@ export const Ramen = ({ imageInfo }: RamenGallerysProps) => {
 					src={imageInfo.image}
 					alt={imageInfo.name}
 					fill
-					className="object-cover"
+					className="object-cover m-1"
 				/>
 				<div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-30 transition duration-300" />
 			</button>
