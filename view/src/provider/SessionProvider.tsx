@@ -1,7 +1,4 @@
 "use client";
-import { isValidUser } from "@/lib/isValidUser";
-import { signOut } from "@/lib/signOut";
-import type { User } from "@/types";
 import { useEffect } from "react";
 
 export interface SessionProviderProps {
@@ -18,16 +15,12 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 		const userId = localStorage.getItem("userID");
 
 		if (!userId) {
+			console.log("ログインしてください")
 			window.location.href = "/login";
 			return;
 		}
 
-		const parsedUser = JSON.parse(userId) as User;
-		isValidUser(parsedUser.uid).then((res) => {
-			if (!res) {
-				signOut();
-			}
-		});
+		console.log("既にログインしています")
 	}, []);
 
 	return <>{children}</>;

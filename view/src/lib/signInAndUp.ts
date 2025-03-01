@@ -1,13 +1,14 @@
-import type { DBUser, User } from "@/types";
 import type { User as FirebaseUser } from "@firebase/auth";
 import { get_url } from "@/lib/utils";
 
-const storeStorageUser = (user: DBUser) => {
-	localStorage.setItem("userID", JSON.stringify(user));
+const storeStorageUser = (uid: string) => {
+	localStorage.setItem("userID", uid);
 };
 
 export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 	// TODO: サインインまたはサインアップ処理を実装する
+	storeStorageUser(firebaseUser.uid);
+
 	console.log("サインインまたはサインアップが完了しました")
 
 	// TODO: バックエンドが完成したら繋ぎこむ
@@ -21,10 +22,10 @@ export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 	// 	}),
 	// });
 
-	// toRoot();
+	toRoot();
 };
 
-const signUp = async (user: User) => {
+const signUp = async () => {
 	// TODO: 
 	console.log("ユーザー登録が完了しました")
 };
