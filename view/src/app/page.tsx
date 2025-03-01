@@ -20,13 +20,13 @@ import { getUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-	const [userId, setUserId] = useState<string | null>(null);
+	const [userId, setUserId] = useState<number | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
 
 	const form = useForm<Post>({
 		resolver: zodResolver(postSchema),
 		defaultValues: {
-			user_id: "",
+			user_id: 0,
 			store_name: "",
 			ramen_name: "",
 			file: undefined,
@@ -40,8 +40,9 @@ export default function Home() {
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
+		const userIDNum = Number(userID);
 		if (userID) {
-			setUserId(userID);
+			setUserId(userIDNum);
 		} else {
 			setUserId(null);
 		}
@@ -59,17 +60,31 @@ export default function Home() {
 
 	const onSubmit = async (data: Post) => {
 		console.log(data);
-		const comppressedFile = await compressImage(data.file);
-		const sendData = { ...data, file: comppressedFile };
-		console.log(sendData);
+		const compressedFile = await compressImage(data.file);
+		const formData = new FormData();
+
+		// 必要なフィールドを FormData に追加
+		formData.append("user_id", data.user_id.toString());
+		formData.append("store_name", data.store_name);
+		formData.append("ramen_name", data.ramen_name);
+		formData.append("deliciousness_id", data.deliciousness_id.toString());
+		formData.append("portion_id", data.portion_id.toString());
+		formData.append("thick_id", data.thick_id.toString());
+		formData.append("texture_id", data.texture_id.toString());
+		formData.append("soup_id", data.soup_id.toString());
+
+		// ファイルの追加
+		if (compressedFile) {
+			formData.append("file", compressedFile);
+		}
+
+		console.log("formData prepared");
 		try {
 			const response = await fetch(getUrl("/v1/ramen"), {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(sendData),
+				body: formData, // Content-Type は自動的に設定されるので指定不要
 			});
+			// response の処理...
 		} catch (error) {
 			console.error(error);
 		}
@@ -167,7 +182,13 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Portion</FormLabel>
 											<FormControl>
-												<Input type="range" min={1} max={5} placeholder="量" {...field} />
+												<Input
+													type="range"
+													min={1}
+													max={5}
+													placeholder="量"
+													{...field}
+												/>
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.
@@ -183,7 +204,13 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Thick</FormLabel>
 											<FormControl>
-												<Input type="range" min={1} max={5} placeholder="太さ" {...field} />
+												<Input
+													type="range"
+													min={1}
+													max={5}
+													placeholder="太さ"
+													{...field}
+												/>
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.
@@ -199,7 +226,13 @@ export default function Home() {
 										<FormItem>
 											<FormLabel>Texture</FormLabel>
 											<FormControl>
-												<Input type="range" min={1} max={5} placeholder="コシ" {...field} />
+												<Input
+													type="range"
+													min={1}
+													max={5}
+													placeholder="コシ"
+													{...field}
+												/>
 											</FormControl>
 											{/* <FormDescription>
 								This is your public display name.

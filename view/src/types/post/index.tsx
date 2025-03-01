@@ -33,7 +33,7 @@ const fileSchema = z
 	.refine((file) => file !== null, { message: "必須です" });
 
 export const postSchema = z.object({
-	user_id: z.string(),
+	user_id: z.number(),
 	store_name: z.string(),
 	ramen_name: z.string(),
 	file: fileSchema,
