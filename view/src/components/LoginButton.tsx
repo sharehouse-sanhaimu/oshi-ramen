@@ -19,6 +19,7 @@ const firebaseConfig = {
 const provider = new GoogleAuthProvider();
 async function signUp() {
 	const auth = getAuth();
+
 	signInWithPopup(auth, provider)
 		.then((result) => {
 			const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -29,7 +30,7 @@ async function signUp() {
 			signInOrUp(user);
 		})
 		.catch((error) => {
-			console.log("error");
+			console.log("error", error);
 			// Handle Errors here.
 			const errorCode = error.code;
 			const errorMessage = error.message;
