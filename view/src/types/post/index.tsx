@@ -12,6 +12,7 @@ const MAX_IMAGE_SIZE = 5; // 5MB
 // unionを使ってnullも許容した上で、後で必須チェックを行う
 const fileSchema = z
 	.union([
+		z.undefined(),
 		z.null(),
 		z.preprocess(
 			(val) => {
@@ -30,7 +31,9 @@ const fileSchema = z
 				}),
 		),
 	])
-	.refine((file) => file !== null, { message: "必須です" });
+	.refine((file) => file !== undefined && file !== null, {
+		message: "必須です",
+	});
 
 export const postSchema = z.object({
 	user_id: z.string(),
