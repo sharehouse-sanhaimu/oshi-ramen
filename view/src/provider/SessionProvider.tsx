@@ -14,9 +14,8 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 		}
 
 		const userId = localStorage.getItem("userID");
-		const getID = userIDStore.getState().getID;
-		const id = getID();
-		console.log("id", id);
+
+		console.log("id with LocalStorage", userId);
 
 		if (!userId) {
 			console.log("ログインしてください")
