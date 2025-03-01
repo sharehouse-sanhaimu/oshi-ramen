@@ -39,7 +39,7 @@ export const postSchema = z.object({
 	user_id: z.number(),
 	store_name: z.string(),
 	ramen_name: z.string(),
-	file: fileSchema,
+	file: z.union([z.null(), fileSchema]),
 	deliciousness_id: z.preprocess(
 		(val) => (typeof val === "string" ? Number.parseInt(val, 10) : val),
 		z.number(),

@@ -32,7 +32,7 @@ export default function Home() {
 			user_id: 0,
 			store_name: "",
 			ramen_name: "",
-			file: undefined,
+			file: null,
 			deliciousness_id: 3,
 			portion_id: 3,
 			thick_id: 3,
@@ -59,7 +59,7 @@ export default function Home() {
 
 	const fileDelete = () => {
 		setIsFile(false);
-		form.setValue("file", undefined);
+		form.setValue("file", null);
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
 		}
@@ -70,6 +70,9 @@ export default function Home() {
 	};
 
 	const onSubmit = async (data: Post) => {
+		if (data.file === null) {
+			throw new Error("ファイルが選択されていません");
+		}
 		console.log(data);
 		const compressedFile = await compressImage(data.file);
 		const formData = new FormData();
