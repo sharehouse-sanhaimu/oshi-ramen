@@ -11,6 +11,7 @@ deliciousness_levels = ["まずい", "普通", "美味しい", "とても美味�
 portions = ["少なめ", "普通", "多め", "大盛り", "特盛"]
 noodle_textures = ["やわらかい", "普通", "少し硬め", "硬め", "バリカタ"]
 noodle_thicknesses = ["極細", "細麺", "中細麺", "中太麺", "極太"]
+soup_richnesses = ["あっさり", "ややあっさり", "普通", "こってり", "超こってり"]
 
 deliciousness_levels.each do |level|
   Deliciousness.find_or_create_by!(notation: level)
@@ -27,3 +28,9 @@ end
 noodle_thicknesses.each do |thickness|
   NoodleThickness.find_or_create_by!(notation: thickness)
 end
+
+soup_richnesses.each do |richness|
+  SoupRichness.find_or_create_by!(notation: richness)
+end
+
+puts "Seed data inserted successfully!"
