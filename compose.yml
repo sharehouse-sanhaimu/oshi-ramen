@@ -25,5 +25,5 @@ services:
       BUNDLE_WITHOUT: "development"
       PORT: "8000"
     volumes:
-      - ./api:/rails  # ローカルの api ディレクトリをコンテナの /rails にマウント
+      - ./api:/api  # ローカルの api ディレクトリをコンテナの /api にマウント
     restart: always
