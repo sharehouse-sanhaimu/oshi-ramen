@@ -12,7 +12,9 @@ FONT_SIZE = 24
 LINE_HEIGHT = 28
 IMAGE_SIZE = 2.75
 
-pdfmetrics.registerFont(TTFont("IPAexGothic", "/Users/iwakiaoiyou/oshi-ramen/magazine/fonts/ipaexg.ttf"))
+pdfmetrics.registerFont(
+    TTFont("IPAexGothic", "/Users/iwakiaoiyou/oshi-ramen/magazine/fonts/ipaexg.ttf")
+)
 
 
 @dataclass
@@ -25,17 +27,23 @@ def create_ramen_presentation(
     output_path: str,
     images: list[Path],
     bg_path: Path,
-    redar_charts: list[ImageFile], # type: ignore
+    redar_charts: list[Path],  # type: ignore
     ramen_info: list[RamenInfo],
 ):
+    FONT_SIZE = 24
+    LINE_HEIGHT = 28
+    IMAGE_SIZE = 2.75
+
+    pdfmetrics.registerFont(
+        TTFont("IPAexGothic", "/Users/iwakiaoiyou/oshi-ramen/magazine/fonts/ipaexg.ttf")
+    )
+
     c = canvas.Canvas(output_path, pagesize=landscape(A4))
     width, height = landscape(A4)
+    print(width, height)
 
     # background_imageを追加
     c.drawImage(bg_path, 0, 0, width=width, height=height)
-
-    # 日本語フォントと文字サイズを設定
-    c.setFont("IPAexGothic", FONT_SIZE)
 
     # images1をアスペクト比を保って縮小して、角を丸くして配置
     image_path = images[0]
@@ -57,7 +65,8 @@ def create_ramen_presentation(
     )
 
     # redar_charts1を左下に配置
-    image = redar_charts[0]
+    image_path = redar_charts[0]
+    image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
     new_height = 2 * inch
@@ -74,10 +83,12 @@ def create_ramen_presentation(
     )
 
     # Info1をImage1とChart1の間に配置
+    c.setFont("IPAexGothic", FONT_SIZE)  # 日本語フォントと文字サイズを設定
     info1 = ramen_info[0]
     text_object = c.beginText(0.5 * inch, height - 4.5 * inch)
+    text_object.setFont("IPAexGothic", LINE_HEIGHT)
     text_object.setTextOrigin(0.5 * inch, height - 4.5 * inch)
-    text_object.setLeading(LINE_HEIGHT)  # 行間を設定（フォントサイズの1.5倍）
+    text_object.setLeading(28)  # 行間を設定（フォントサイズの1.5倍）
 
     text_object.textLine(info1.store)
     text_object.textLine(info1.name)
@@ -103,7 +114,8 @@ def create_ramen_presentation(
     )
 
     # Chart2を上中央に配置
-    image = redar_charts[1]
+    image_path = redar_charts[1]
+    image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
     new_height = 2 * inch
@@ -120,11 +132,12 @@ def create_ramen_presentation(
     )
 
     # Info2をImage2とChart2の間に配置
+    c.setFont("IPAexGothic", FONT_SIZE)  # 日本語フォントと文字サイズを設定
     info2 = ramen_info[1]
     text_object = c.beginText(4.5 * inch, 5 * inch)
     text_object.setFont("IPAexGothic", LINE_HEIGHT)
     text_object.setTextOrigin(4.5 * inch, 5 * inch)
-    text_object.setLeading(LINE_HEIGHT)  # 行間を設定（フォントサイズの1.5倍）
+    text_object.setLeading(36)  # 行間を設定（フォントサイズの1.5倍）
 
     text_object.textLine(info2.store)
     text_object.textLine(info2.name)
@@ -150,7 +163,8 @@ def create_ramen_presentation(
     )
 
     # Chart3を右下に配置
-    image = redar_charts[2]
+    image_path = redar_charts[2]
+    image = Image.open(image_path)
     image_width, image_height = image.size
     aspect_ratio = image_width / image_height
     new_height = 2 * inch
@@ -167,10 +181,12 @@ def create_ramen_presentation(
     )
 
     # Info3をImage3の上に配置
+    c.setFont("IPAexGothic", FONT_SIZE)  # 日本語フォントと文字サイズを設定
     info3 = ramen_info[2]
     text_object = c.beginText(width - new_width - 1 * inch, height - 2.25 * inch)
+    text_object.setFont("IPAexGothic", LINE_HEIGHT)
     text_object.setTextOrigin(width - new_width - 1 * inch, height - 2.25 * inch)
-    text_object.setLeading(LINE_HEIGHT)  # 行間を設定（フォントサイズの1.5倍）
+    text_object.setLeading(36)  # 行間を設定（フォントサイズの1.5倍）
 
     text_object.textLine(info3.store)
     text_object.textLine(info3.name)
@@ -194,9 +210,9 @@ if __name__ == "__main__":
     radar_chart_dir = Path("/Users/iwakiaoiyou/oshi-ramen/magazine/imgs/radar-chart")
 
     radar_charts = [
-        Image.open(radar_chart_dir / "example05.png"),
-        Image.open(radar_chart_dir / "example05.png"),
-        Image.open(radar_chart_dir / "example05.png"),
+        radar_chart_dir / "example05.png",
+        radar_chart_dir / "example05.png",
+        radar_chart_dir / "example05.png",
     ]
 
     ramen_info = [
@@ -207,11 +223,9 @@ if __name__ == "__main__":
 
     # 背景画像のパスを指定
     bgimg_path = Path(
-        "/Users/iwakiaoiyou/oshi-ramen/magazine/imgs/magazine/ramen-magazine-template.png"
+        "/Users/iwakiaoiyou/oshi-ramen/magazine/assets/ramen-magazine-template.png"
     )
-    out_path = (
-        "/Users/iwakiaoiyou/oshi-ramen/magazine/out/ramen_presentation.pdf"
-    )
+    out_path = "/Users/iwakiaoiyou/oshi-ramen/magazine/out/ramen_presentation.pdf"
 
     create_ramen_presentation(
         out_path,
