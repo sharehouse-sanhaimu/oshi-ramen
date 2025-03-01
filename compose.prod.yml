@@ -1,7 +1,14 @@
 services:
+  cloudflare:
+    image: "cloudflare/cloudflared:2025.2.1"
+    container_name: "cloudflare"
+    volumes: [ './cloudflare:/home/nonroot/.cloudflared' ]
+    command: tunnel run
+    restart: unless-stopped
   view:
     build:
       context: ./view
+      dockerfile: prod.Dockerfile
     volumes:
       - ./view:/app
       - ./view/.pnpm-store:/app/.pnpm-store
@@ -9,11 +16,33 @@ services:
       - "3000:3000"
     env_file:
       - view.env
-    command: ["sh", "-c", "pnpm install && pnpm dev"]
 
-  cloudflare:
-    image: "cloudflare/cloudflared:2025.2.1"
-    container_name: "cloudflare"
-    volumes: [ './cloudflare:/home/nonroot/.cloudflared' ]
-    command: tunnel run
-    restart: unless-stopped
+  api:
+    build:
+      context: ./api
+      dockerfile: api.Dockerfile
+    container_name: api
+    ports:
+      - "8000:8000"
+    env_file:
+      - api.env  # 環境変数を api.env から読み込む
+    environment:
+      RAILS_ENV: development
+      BUNDLE_DEPLOYMENT: "1"
+      BUNDLE_PATH: "/usr/local/bundle"
+      PORT: "8000"
+    volumes:
+      - ./api:/api  # ローカルの api ディレクトリをコンテナの /api にマウント
+    restart: always
+  #フロントとバックの通信(FastAPI)の環境
+
+  magazine:
+    build:
+      context: ./magazine
+    volumes:
+      - ./magazine:/magazine
+    ports:
+      - "9004:9004"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 9004
+    env_file:
+      - magazine.env

@@ -1,7 +1,19 @@
+build:
+	@echo "Building..."
+	@docker compose build
+	@echo "built successfully"
+
 up:
 	@echo "Starting Nextjs App..."
 	@docker compose up -d
 	@echo "Nextjs App: http://localhost:3000"
+
+prod-build:
+	@echo "Building..."
+	@docker compose -f compose.prod.yml build
+	@docker compose -f compose.prod.yml run --rm view pnpm install
+	@docker compose -f compose.prod.yml run --rm view pnpm run build
+	@echo "built successfully"
 
 prod-up:
 	@echo "Starting Nextjs App..."
@@ -52,3 +64,5 @@ format:
 	@echo "Formatting code..."
 	@docker compose exec -it view pnpm run format
 	@echo "Code formatted"
+
+
