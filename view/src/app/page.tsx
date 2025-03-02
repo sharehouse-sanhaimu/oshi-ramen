@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compressImage } from "@/lib/compressImage";
+import { getUserIcon } from "@/lib/getUserIcon";
 import { getUrl } from "@/lib/utils";
 import type { RamenGalleryList } from "@/types/RamenGallery";
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ export default function Home() {
 	const [isFile, setIsFile] = useState<boolean>(false);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [iconUrl, setIconUrl] = useState<string | null>(null);
 
 	const [gallery, setGallery] = useState<RamenGalleryList>([]);
 
@@ -52,6 +53,13 @@ export default function Home() {
 		const userIDNum = Number(userID);
 		if (userID) {
 			setUserId(userIDNum);
+			getUserIcon(userID)
+				.then((res) => {
+					setIconUrl(res);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		} else {
 			setUserId(null);
 		}
