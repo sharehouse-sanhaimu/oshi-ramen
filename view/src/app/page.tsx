@@ -17,6 +17,7 @@ import { getUrl } from "@/lib/utils";
 import type { RamenGalleryList } from "@/types/RamenGallery";
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -43,6 +44,8 @@ export default function Home() {
 			soup_id: 3,
 		},
 	});
+
+	const userName = localStorage.getItem("userName");
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
@@ -144,7 +147,9 @@ export default function Home() {
 										className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 									/>
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">User Name</div>
+										<div className="p-2 font-extrabold text-gray-800">
+											{userName}
+										</div>
 										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
 											雑誌印刷
 										</Card>
@@ -176,7 +181,9 @@ export default function Home() {
 																	if (files && files.length !== 0) {
 																		setIsFile(true);
 																		// 選択されたファイルのプレビューURLを生成
-																		setPreviewUrl(URL.createObjectURL(files[0]));
+																		setPreviewUrl(
+																			URL.createObjectURL(files[0]),
+																		);
 																	}
 																}}
 																ref={fileInputRef}
@@ -256,7 +263,7 @@ export default function Home() {
 														おいしさ
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
@@ -342,7 +349,7 @@ export default function Home() {
 														麺の硬さ
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
@@ -371,7 +378,7 @@ export default function Home() {
 														あっさり・こってり
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
