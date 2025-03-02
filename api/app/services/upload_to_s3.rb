@@ -12,11 +12,11 @@ class UploadToS3
     key = "uploads/#{SecureRandom.uuid}_#{file.original_filename}"
 
     content_type = file.content_type || 'application/octet-stream'
-
+    io = File.open(file.path, 'rb') if file.respond_to?(:path)
     s3.put_object(
       bucket: ENV['AWS_BUCKET_NAME'],
       key: key,
-      body: file,
+      body: io,
       content_type: content_type
     )
     {
