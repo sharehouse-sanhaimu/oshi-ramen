@@ -48,7 +48,6 @@ export function RamenModal({
 		value,
 	}));
 
-	console.log("radarData", radarData);
 
 	// モーダル外クリックで閉じる処理
 	useEffect(() => {

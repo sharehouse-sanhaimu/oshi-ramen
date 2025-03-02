@@ -74,7 +74,6 @@ export default function Home() {
 					return;
 				}
 				const data = await response.json();
-				console.log("取得したデータ:", data);
 				setGallery(data);
 			} catch (error) {
 				console.error("Fetchエラー:", error);
