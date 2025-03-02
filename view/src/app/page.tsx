@@ -137,7 +137,11 @@ export default function Home() {
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<div
-								className={`${isFile ? "hidden" : "flex flex-initial justify-evenly items-center"}`}
+								className={`${
+									isFile
+										? "hidden"
+										: "flex flex-initial justify-evenly items-center bg-white p-6 rounded-xl shadow-md"
+								}`}
 							>
 								<img
 									src="/ramen/IMG_9358.jpeg"
@@ -145,27 +149,26 @@ export default function Home() {
 									className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 								/>
 								<div className="flex flex-col items-center">
-									<div className="p-2 font-extrabold text-gray-800">User Name</div>
-									<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
+									<div className="mb-2 font-extrabold text-gray-800 text-lg">
+										User Name
+									</div>
+									<Card className="flex items-center justify-center p-2 w-32 h-10 bg-gray-800 m-2 text-white text-center rounded-lg shadow-sm">
 										雑誌印刷
 									</Card>
 									<FormField
 										control={form.control}
 										name="file"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="w-full">
 												<FormControl>
 													<div className="relative">
 														{/* カスタムボタンとして画像を表示 */}
 														<label
 															htmlFor="file-input"
-															className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
+															className="cursor-pointer inline-block px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full text-white font-medium hover:from-indigo-600 hover:to-purple-600 transition"
 														>
-															<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
-																投稿
-															</Card>
+															投稿
 														</label>
-
 														{/* 実際のファイル入力は非表示 */}
 														<Input
 															id="file-input"
@@ -182,7 +185,7 @@ export default function Home() {
 														/>
 													</div>
 												</FormControl>
-												<FormMessage />
+												<FormMessage className="mt-1 text-sm text-red-500" />
 											</FormItem>
 										)}
 									/>
