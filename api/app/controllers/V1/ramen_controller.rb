@@ -38,7 +38,7 @@ module V1
       unless User.exists?(id: user_id)
         return render json: { error: "User not found" }, status: :not_found
       end
-      ramen_records = Ramen.where(user_id: user_id)
+      ramen_records = Ramen.where(user_id: user_id).order(created_at: :desc)
       response_data = modified_ramen_records = ramen_records.map do |record|
         {
           name: record.name,
