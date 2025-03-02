@@ -147,7 +147,7 @@ export default function Home() {
 								/>
 								<div className="flex flex-col items-center">
 									<div className="p-2 font-extrabold text-gray-800">User Name</div>
-									<MagazineModal />
+									<MagazineModal userId={userId} />
 									<FormField
 										control={form.control}
 										name="file"
