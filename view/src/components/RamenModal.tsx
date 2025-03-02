@@ -31,25 +31,22 @@ export function RamenModal({
 	const modalRef = useRef<HTMLDivElement>(null);
 	const chartAxisList = ["うまい", "こってり", "バリカタ", "大盛り", "こってり"];
 	const parameterValues = Object.values(parameters); // 順序が固定であることを前提
-	
 
-	
 	const labelMapping: {
 		[key: string]: string; // どんな文字列キーでもstring型の値を返す
-	  } = {
+	} = {
 		deliciousness_id: "うまい",
 		noodle_texture_id: "バリカタ",
 		noodle_thickness_id: "ちぢれ",
 		portion_id: "大盛り",
 		soup_richness_id: "こってり",
-	  };
-			
-	  const radarData = Object.entries(parameters).map(([key, value]) => ({
+	};
+
+	const radarData = Object.entries(parameters).map(([key, value]) => ({
 		// labelMappingに対応があれば日本語、なければ元のkey
 		subject: labelMapping[key] ?? key,
 		value,
-	  }));
-	  
+	}));
 
 	console.log("radarData", radarData);
 
