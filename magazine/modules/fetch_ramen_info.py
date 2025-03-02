@@ -15,14 +15,14 @@ def fetch_ramen_info(id: str) -> list:
 
     extracted_data = []
     id_set = set()
-    for _ in range(3):
+    while len(extracted_data) < 3:
         _id = random.randint(0, len(response.json()) - 1)
         if _id in id_set:
             continue
         id_set.add(_id)
         extracted_data.append(response.json()[_id])
-    print(extracted_data)
-    
+    print(len(extracted_data))
+
     return extracted_data
 
 
