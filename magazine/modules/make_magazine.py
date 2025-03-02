@@ -20,10 +20,10 @@ IMAGE_SIZE = 2.75
 BASE_PATH = "/Users/iwakiaoiyou/oshi-ramen/magazine/"
 pdfmetrics.registerFont(TTFont("IPAexGothic", "fonts/ipaexg.ttf"))
 BG_PATH = "assets/ramen-magazine-template-2.png"
-OUT_PATH = "out/magazine.pdf"
 
 
 def make_magazine(
+    out_path: str,
     images: list[str],
     redar_charts: list[Path],  # type: ignore
     ramen_info: list[RamenInfo],
@@ -34,7 +34,7 @@ def make_magazine(
     CHART_SIZE = 3
     RADIUS = 500
 
-    c = canvas.Canvas(OUT_PATH, pagesize=landscape(A4))
+    c = canvas.Canvas(out_path, pagesize=landscape(A4))
     width, height = landscape(A4)
     print(width, height)
 

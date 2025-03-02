@@ -11,6 +11,8 @@ from modules.make_magazine import make_magazine
 
 
 def magazine_handler(user_id: int):
+    BASE_OUT_DIR = Path("out") / str(user_id)
+
     data = fetch_ramen_info(user_id)
     print(len(data))
 
@@ -34,7 +36,7 @@ def magazine_handler(user_id: int):
     ]
 
     # Create output directory if it doesn't exist
-    output_dir = Path("out/radar_chart")
+    output_dir = BASE_OUT_DIR / "radar_charts"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     radar_chart_path: list[Path] = []
@@ -49,7 +51,8 @@ def magazine_handler(user_id: int):
     print(radar_chart_path)
 
     # Create magazine
-    make_magazine(img_urls, radar_chart_path, ramen_info_list)
+    out_path = BASE_OUT_DIR / "magazine.pdf"
+    make_magazine(str(out_path), img_urls, radar_chart_path, ramen_info_list)
     print("Created magazine")
 
 
