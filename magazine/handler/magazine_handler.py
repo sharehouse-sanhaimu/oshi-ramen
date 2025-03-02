@@ -3,6 +3,9 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+import os
+
+import requests
 from models.radar_chart import RadarChartInput
 from models.ramen_info import RamenInfo
 from modules.create_radar_chart import create_radar_chart
@@ -58,6 +61,19 @@ def magazine_handler(user_id: int):
 
     # Convert Magazine to Jpeg
     pdf2jpeg(out_path, BASE_OUT_DIR / "output_page.jpeg")
+
+    # Save to S3 and Get URL
+    api_endpoint = os.getenv("API_ENDPOINT")
+    url = f"{api_endpoint}/v1/s3"
+    print("url:", url)
+
+    with open(BASE_OUT_DIR / "output_page.jpeg", "rb") as f:
+        files = {"file": ("output_page.jpeg", f, "image/jpeg")}
+        response = requests.post(
+            url, headers={"Content-Type": "application/json"}, files=files
+        )
+
+    print(response.text)
 
 
 if __name__ == "__main__":
