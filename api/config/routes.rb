@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :users, only: [:create, :show]
     resources :ramen, only: [:create, :index]
+    resources :s3, only: [:create]
   end
 
   # Defines the root path route ("/")
