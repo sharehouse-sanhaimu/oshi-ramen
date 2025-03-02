@@ -28,6 +28,22 @@ module V1
       end
     end
 
+    def show
+      user = User.find_by(id: params[:id])
+
+      if user
+        render json: ResponseDto.new(
+          message: 'User found successfully',
+          data: user
+        ), status: :ok
+      else
+        render json: ResponseDto.new(
+          message: 'User not found',
+          data: { errors: user.errors.full_messages } # 手動でエラーメッセージを設定
+        ), status: :not_found
+      end
+    end
+
     # APIのリクエストパラメータを取得する関数
     #
     # @return [User] ボディパラメータ
