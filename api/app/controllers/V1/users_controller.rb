@@ -14,9 +14,8 @@ module V1
       user = post_create_params
 
       uploaded_file = GetImageFromUrl.call(user.icon_url)
-
       s3_result = UploadToS3.call(uploaded_file)
-      user.icon_url = s3_result.url
+      user.icon_url = s3_result[:url]
       if user.save
         render json: ResponseDto.new(
           message: 'User created successfully',

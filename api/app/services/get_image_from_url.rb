@@ -3,7 +3,7 @@ require 'open-uri'
 require 'stringio'
 
 class GetImageFromUrl
-  def self.call(url)
+  def self.call(image_url)
     # 画像をダウンロード
     file = URI.open(image_url)
 
