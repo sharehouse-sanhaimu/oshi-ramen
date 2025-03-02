@@ -2,26 +2,44 @@
 
 import { useState } from "react";
 import {Button } from "@/components/ui/button";
+import { getMagazineUrl } from "@/lib/utils";
 
-export function MagazineModal() {
+type MagazineModalProps = {
+    userId: number | null;
+};
+
+export function MagazineModal( { userId }: MagazineModalProps ) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const openModal = async () => {
-		setIsOpen(true);
-		setIsLoading(true);
-		try {
-			const response = await fetch("http://localhost:9004/api.thecatapi.com/v1/images/search");
-			if (!response.ok) throw new Error("APIエラー");
-			const data = await response.json();
-			setImageUrl(data.url);
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+	// const openModal = async () => {
+	// 	setIsOpen(true);
+	// 	setIsLoading(true);
+	// 	try {
+	// 		const response = await fetch(getMagazineUrl(`make_magazine?user_id=${userId}`));
+	// 		if (!response.ok) throw new Error("APIエラー");
+	// 		const data = await response.json();
+	// 		setImageUrl(data.url);
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	} finally {
+	// 		setIsLoading(false);
+	// 	}
+	// };
+
+    const printMagazine = async () => {
+        try {
+            const response = await fetch(getMagazineUrl(`make_magazine?user_id=${userId}`));
+            if (!response.ok) throw new Error("APIエラー");
+            const data = await response.json();
+            setImageUrl(data.url);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
 	const closeModal = () => {
 		setIsOpen(false);
@@ -39,7 +57,7 @@ export function MagazineModal() {
 		<>
 			<Button
 				type="button"
-				onClick={openModal}
+				onClick={printMagazine}
 				className="flex items-center rounded-2xl justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center"
 			>
 				雑誌印刷
