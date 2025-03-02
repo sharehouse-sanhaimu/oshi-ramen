@@ -190,125 +190,179 @@ export default function Home() {
 							</div>
 
 							{isFile ? (
-								<>
-									<FormField
-										control={form.control}
-										name="store_name"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">お店の名前</FormLabel>
-												<FormControl>
-													<Input placeholder="お店の名前" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="ramen_name"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">ラーメンの名前</FormLabel>
-												<FormControl>
-													<Input placeholder="ラーメンの名前" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="deliciousness_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">おいしさ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="おいしさ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="portion_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">量</FormLabel>
-												<FormControl>
-													<Input type="range" min={1} max={5} placeholder="量" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="thick_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">太さ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="太さ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="texture_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">麺の硬さ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="コシ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="soup_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">あっさり・こってり</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="コッテリ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<Button type="submit">Submit</Button>
-									<Button onClick={handleClick}>キャンセル</Button>
-								</>
+								<div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
+									<div className="space-y-6">
+										<FormField
+											control={form.control}
+											name="store_name"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														お店の名前
+													</FormLabel>
+													<FormControl>
+														<Input
+															placeholder="お店の名前"
+															{...field}
+															className="w-full text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="ramen_name"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														ラーメンの名前
+													</FormLabel>
+													<FormControl>
+														<Input
+															placeholder="ラーメンの名前"
+															{...field}
+															className="w-full text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="deliciousness_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														おいしさ
+													</FormLabel>
+													<FormControl>
+														<Input
+															type="range"
+															min={1}
+															max={5}
+															placeholder="おいしさ"
+															{...field}
+															className="w-full accent-indigo-500"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="portion_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														量
+													</FormLabel>
+													<FormControl>
+														<Input
+															type="range"
+															min={1}
+															max={5}
+															placeholder="量"
+															{...field}
+															className="w-full accent-indigo-500"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="thick_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														太さ
+													</FormLabel>
+													<FormControl>
+														<Input
+															type="range"
+															min={1}
+															max={5}
+															placeholder="太さ"
+															{...field}
+															className="w-full accent-indigo-500"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="texture_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														麺の硬さ
+													</FormLabel>
+													<FormControl>
+														<Input
+															type="range"
+															min={1}
+															max={5}
+															placeholder="コシ"
+															{...field}
+															className="w-full accent-indigo-500"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="soup_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														あっさり・こってり
+													</FormLabel>
+													<FormControl>
+														<Input
+															type="range"
+															min={1}
+															max={5}
+															placeholder="コッテリ"
+															{...field}
+															className="w-full accent-indigo-500"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+									</div>
+
+									<div className="flex justify-between mt-8">
+										<Button
+											type="submit"
+											className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition"
+										>
+											Submit
+										</Button>
+										<Button
+											onClick={handleClick}
+											className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+										>
+											キャンセル
+										</Button>
+									</div>
+								</div>
 							) : (
 								<RamenGallery gallery={gallery} />
 							)}
