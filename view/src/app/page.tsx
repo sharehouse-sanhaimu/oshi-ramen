@@ -256,14 +256,20 @@ export default function Home() {
 														おいしさ
 													</FormLabel>
 													<FormControl>
-														<Input
-															type="range"
-															min={1}
-															max={5}
-															placeholder="おいしさ"
-															{...field}
-															className="w-full accent-indigo-500"
-														/>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="美味しさ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>まずい</span>
+																<span>美味しい</span>
+															</div>
+														</div>
 													</FormControl>
 													<FormMessage className="mt-1 text-sm text-red-500" />
 												</FormItem>
@@ -279,20 +285,25 @@ export default function Home() {
 														量
 													</FormLabel>
 													<FormControl>
-														<Input
-															type="range"
-															min={1}
-															max={5}
-															placeholder="量"
-															{...field}
-															className="w-full accent-indigo-500"
-														/>
+														<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="量"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>少なめ</span>
+																<span>多い</span>
+															</div>
+														</div>
 													</FormControl>
 													<FormMessage className="mt-1 text-sm text-red-500" />
 												</FormItem>
 											)}
 										/>
-
 										<FormField
 											control={form.control}
 											name="thick_id"
@@ -302,14 +313,20 @@ export default function Home() {
 														太さ
 													</FormLabel>
 													<FormControl>
-														<Input
-															type="range"
-															min={1}
-															max={5}
-															placeholder="太さ"
-															{...field}
-															className="w-full accent-indigo-500"
-														/>
+														<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="太さ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>細い</span>
+																<span>太い</span>
+															</div>
+														</div>
 													</FormControl>
 													<FormMessage className="mt-1 text-sm text-red-500" />
 												</FormItem>
@@ -325,14 +342,20 @@ export default function Home() {
 														麺の硬さ
 													</FormLabel>
 													<FormControl>
-														<Input
-															type="range"
-															min={1}
-															max={5}
-															placeholder="コシ"
-															{...field}
-															className="w-full accent-indigo-500"
-														/>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="コシ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>柔らかい</span>
+																<span>固い</span>
+															</div>
+														</div>
 													</FormControl>
 													<FormMessage className="mt-1 text-sm text-red-500" />
 												</FormItem>
@@ -348,14 +371,20 @@ export default function Home() {
 														あっさり・こってり
 													</FormLabel>
 													<FormControl>
-														<Input
-															type="range"
-															min={1}
-															max={5}
-															placeholder="コッテリ"
-															{...field}
-															className="w-full accent-indigo-500"
-														/>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="こってり"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>あっさり</span>
+																<span>こってり</span>
+															</div>
+														</div>
 													</FormControl>
 													<FormMessage className="mt-1 text-sm text-red-500" />
 												</FormItem>
