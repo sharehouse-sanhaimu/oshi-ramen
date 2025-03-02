@@ -1,3 +1,21 @@
+clean:
+	@echo "Cleaning..."
+	@docker compose build --no-cache
+	@docker compose up -d
+	@docker compose exec api bundle exec rails db:reset
+	@docker compose exec api bundle exec rails db:migrate
+	@docker compose exec api bundle exec rails db:seed
+	@echo "Cleaned successfully"
+
+soft-clean:
+	@echo "Cleaning..."
+	@docker compose build
+	@docker compose up -d
+	@docker compose exec api bundle exec rails db:reset
+	@docker compose exec api bundle exec rails db:migrate
+	@docker compose exec api bundle exec rails db:seed
+	@echo "Cleaned successfully"
+
 build:
 	@echo "Building..."
 	@docker compose build
