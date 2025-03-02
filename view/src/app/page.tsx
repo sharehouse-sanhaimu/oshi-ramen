@@ -20,6 +20,7 @@ import type { Post } from "@/types/post";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { MagazineModal } from "@/components/magazineModal";
 
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
@@ -146,9 +147,7 @@ export default function Home() {
 								/>
 								<div className="flex flex-col items-center">
 									<div className="p-2 font-extrabold text-gray-800">User Name</div>
-									<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
-										雑誌印刷
-									</Card>
+									<MagazineModal />
 									<FormField
 										control={form.control}
 										name="file"
