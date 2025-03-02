@@ -40,10 +40,8 @@ def crop_center_square(img: Image):
     return img
 
 
-def round_corners_all_images(img_url, out_dir, radius):
-    # 出力ディレクトリが存在しない場合は作成
-    out_dir.mkdir(parents=True, exist_ok=True)
-    print(out_dir)
+def crop_img(img_url, out_dir, radius) -> Image:
+    print(img_url)
 
     # 画像を開く
     response = requests.get(img_url)
@@ -55,16 +53,22 @@ def round_corners_all_images(img_url, out_dir, radius):
     # 角を丸める
     image = round_corner(image, radius=radius)
 
-    # 出力パスを作成 as png
-    out_path = out_dir / Path(img_url).name
-    out_path = out_path.with_suffix(".png")
-    print(out_path)
+    if out_dir is not None:
+        # 出力ディレクトリが存在しない場合は作成
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print(out_dir)
+        # 出力パスを作成 as png
+        out_path = out_dir / Path(img_url).name
+        out_path = out_path.with_suffix(".png")
+        print(out_path)
 
-    # 画像を保存する
-    image.save(out_path)
+        # 画像を保存する
+        image.save(out_path)
+
+    return image
 
 
 if __name__ == "__main__":
     img_url = "https://oshi-ramen-image.s3.ap-northeast-1.amazonaws.com/uploads/8fba9374-b161-45ca-920a-4e4cb09c63c5_1aa37b19-9224-4d8f-ae5f-d8278647e552_kurakukuroroku.jpg"
     out_dir = Path("/Users/iwakiaoiyou/oshi-ramen/magazine/imgs/url")
-    round_corners_all_images(img_url, out_dir, radius=100)  # radiusは角の丸みの半径
+    crop_img(img_url, out_dir, radius=100)  # radiusは角の丸みの半径
