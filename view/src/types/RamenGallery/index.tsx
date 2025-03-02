@@ -4,8 +4,8 @@ export const ramenGallerySchema = z.object({
 	id: z.number(),
 	name: z.string(),
 	description: z.string(),
-	image: z.string(),
-	stats: z.object({
+	image_url: z.string(),
+	parameters: z.object({
 		味: z.number(),
 		こってり: z.number(),
 		麺の硬さ: z.number(),
