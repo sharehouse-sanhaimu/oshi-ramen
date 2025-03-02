@@ -26,7 +26,7 @@ up:
 	@docker compose up -d
 	@echo "Nextjs App: http://localhost:3000"
 
-prod-build:
+prod-build-first:
 	@echo "Building..."
 	@docker compose -f compose.prod.yml build
 	@docker compose -f compose.prod.yml run --rm view pnpm install
@@ -34,6 +34,14 @@ prod-build:
 	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:reset
 	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:migrate
 	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:seed
+	@echo "built successfully"
+
+prod-build:
+	@echo "Building..."
+	@docker compose -f compose.prod.yml build
+	@docker compose -f compose.prod.yml run --rm view pnpm install
+	@docker compose -f compose.prod.yml run --rm view pnpm run build
+	@docker compose -f compose.prod.yml run --rm api bundle exec rails db:migrate
 	@echo "built successfully"
 
 prod-up:
