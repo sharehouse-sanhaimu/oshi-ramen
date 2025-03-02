@@ -136,9 +136,9 @@ export default function Home() {
 				<div className="flex flex-col">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							<Card className="m-4">
+							<Card className={`${isFile ? "hidden" : "m-4"}`}>
 							<div
-								className={`${isFile ? "hidden" : "flex flex-initial justify-evenly items-center"}`}
+								className="flex flex-initial justify-evenly items-center"
 							>
 								<img
 									src="/ramen/IMG_9358.jpeg"
@@ -193,7 +193,7 @@ export default function Home() {
 
 							{isFile ? (
 								<div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
-									<div className="space-y-6">
+									<div className="space-y-6 p-4 m-4">
 										<FormField
 											control={form.control}
 											name="store_name"
