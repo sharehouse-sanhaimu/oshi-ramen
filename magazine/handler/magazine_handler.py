@@ -1,8 +1,12 @@
 import sys
+import requests
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+import os
+
+import requests
 from models.radar_chart import RadarChartInput
 from models.ramen_info import RamenInfo
 from modules.create_radar_chart import create_radar_chart
@@ -58,6 +62,23 @@ def magazine_handler(user_id: int):
 
     # Convert Magazine to Jpeg
     pdf2jpeg(out_path, BASE_OUT_DIR / "output_page.jpeg")
+
+    # Save to S3 and Get URL
+    api_endpoint = os.getenv("API_ENDPOINT")
+    url = f"{api_endpoint}/v1/s3"
+    print("url:", url)
+    file_path = BASE_OUT_DIR / "output_page.jpeg"
+    try:
+        with open(file_path, "rb") as f:
+            files = {"file": (file_path.name, f, "image/jpeg")}
+            response = requests.post(url, files=files)
+            response.raise_for_status()  # HTTPエラーがあれば例外を発生させる
+            print(response.json())
+            img_url = response.json()["data"]["url"]
+            print(img_url)
+            return img_url
+    except requests.exceptions.RequestException as e:
+        print(f"Error uploading to S3: {e}")
 
 
 if __name__ == "__main__":

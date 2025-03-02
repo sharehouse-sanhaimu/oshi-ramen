@@ -6,5 +6,5 @@ router = APIRouter()
 
 @router.post("/make_magazine")
 def generate_magazine(user_id: int):
-    magazine_handler(user_id)
-    return {"message": "Success"}
+    url = magazine_handler(user_id)
+    return {"message": "Success", "url": url}

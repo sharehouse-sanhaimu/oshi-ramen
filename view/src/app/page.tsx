@@ -1,6 +1,7 @@
 "use client";
 
 import { RamenGallery } from "@/components/RamenGallery";
+import { MagazineModal } from "@/components/magazineModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -23,10 +24,11 @@ import { useForm } from "react-hook-form";
 
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
+	const [userName, setUserName] = useState<string | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
-
+	const [iconUrl, setIconUrl] = useState<string | null>(null);
 	const [gallery, setGallery] = useState<RamenGalleryList>([]);
 
 	const form = useForm<Post>({
@@ -46,9 +48,11 @@ export default function Home() {
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
+		const userName = localStorage.getItem("userName");
 		const userIDNum = Number(userID);
 		if (userID) {
 			setUserId(userIDNum);
+			setUserName(userName);
 		} else {
 			setUserId(null);
 		}
@@ -68,13 +72,20 @@ export default function Home() {
 						"Content-Type": "application/json",
 					},
 				});
-				if (!response.ok) {
+				const responseIcon = await fetch(getUrl(`/v1/users/${userId}`), {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (!response.ok || !responseIcon.ok) {
 					console.error("APIエラー:", response.status);
 					return;
 				}
 				const data = await response.json();
-				console.log("取得したデータ:", data);
+				const iconData = await responseIcon.json();
 				setGallery(data);
+				setIconUrl(iconData.data.icon_url);
 			} catch (error) {
 				console.error("Fetchエラー:", error);
 			}
@@ -138,16 +149,16 @@ export default function Home() {
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<Card className={`${isFile ? "hidden" : "m-4"}`}>
 								<div className="flex flex-initial justify-evenly items-center">
-									<img
-										src="/ramen/IMG_9358.jpeg"
-										alt="アイコン"
-										className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
-									/>
+									{iconUrl && (
+										<img
+											src={iconUrl}
+											alt="アイコン"
+											className="w-24 h-24 object-cover rounded-full border-0 shadow-lg"
+										/>
+									)}
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">User Name</div>
-										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
-											雑誌印刷
-										</Card>
+										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
+										<MagazineModal userId={userId} />{" "}
 										<FormField
 											control={form.control}
 											name="file"
@@ -256,7 +267,7 @@ export default function Home() {
 														おいしさ
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
@@ -342,7 +353,7 @@ export default function Home() {
 														麺の硬さ
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
@@ -371,7 +382,7 @@ export default function Home() {
 														あっさり・こってり
 													</FormLabel>
 													<FormControl>
-													<div>
+														<div>
 															<Input
 																type="range"
 																min={1}
