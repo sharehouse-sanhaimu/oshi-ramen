@@ -14,7 +14,8 @@ type responseJson = {
 
 export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 	try {
-		const res = await fetch(getUrl("/v1/users"), {
+		console.log("firebaseUser:", firebaseUser);
+		const res = await fetch(getUrl("v1/users"), {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -22,6 +23,7 @@ export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 			body: JSON.stringify({
 				google_id: firebaseUser.uid,
 				nickname: firebaseUser.displayName || "default_nickname", // ニックネームを追加
+				icon_url: firebaseUser.photoURL || "default_icon_url", // アイコン画像の URL を追加
 			}),
 		});
 
