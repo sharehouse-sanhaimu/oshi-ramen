@@ -8,10 +8,13 @@ type RamenGallerysProps = {
 };
 
 export const RamenGallery = ({ gallery }: RamenGallerysProps) => {
+	if (gallery.length === 0) {
+		return <p>まだ投稿がありません</p>;
+	}
 	return (
 		<div className="grid grid-cols-3 gap-0.5">
 			{gallery.map((ramen) => (
-				<Ramen imageInfo={ramen} key={ramen.id} />
+				<Ramen imageInfo={ramen} key={ramen.name} />
 			))}
 		</div>
 	);
