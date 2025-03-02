@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
+	const [userName, setUserName] = useState<string | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -46,20 +47,14 @@ export default function Home() {
 		},
 	});
 
-	const userName = localStorage.getItem("userName");
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
+		const userName = localStorage.getItem("userName");
 		const userIDNum = Number(userID);
 		if (userID) {
 			setUserId(userIDNum);
-			getUserIcon(userID)
-				.then((res) => {
-					setIconUrl(res);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+			setUserName(userName);
 		} else {
 			setUserId(null);
 		}
