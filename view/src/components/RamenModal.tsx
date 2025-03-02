@@ -48,7 +48,6 @@ export function RamenModal({
 		value,
 	}));
 
-
 	// モーダル外クリックで閉じる処理
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {

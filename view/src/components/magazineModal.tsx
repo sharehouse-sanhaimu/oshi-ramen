@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import {Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { getMagazineUrl } from "@/lib/utils";
+import { useState } from "react";
 
 type MagazineModalProps = {
-    userId: number | null;
+	userId: number | null;
 };
 
-export function MagazineModal( { userId }: MagazineModalProps ) {
+export function MagazineModal({ userId }: MagazineModalProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +18,12 @@ export function MagazineModal( { userId }: MagazineModalProps ) {
 		setIsOpen(true);
 		setIsLoading(true);
 		try {
-			const response = await fetch(getMagazineUrl(`make_magazine?user_id=${userId}`), {
-				method: "POST"
-			});
+			const response = await fetch(
+				getMagazineUrl(`make_magazine?user_id=${userId}`),
+				{
+					method: "POST",
+				},
+			);
 			if (!response.ok) throw new Error("APIエラー");
 			const data = await response.json();
 			setImageUrl(data.url);
@@ -31,16 +34,16 @@ export function MagazineModal( { userId }: MagazineModalProps ) {
 		}
 	};
 
-    const handlePrintClick = async () => {
-        try {
+	const handlePrintClick = async () => {
+		try {
 			setPrintMessage("印刷を受けつけました。ご確認ください。");
-            await fetch(getMagazineUrl(`print_magazine?user_id=${userId}`), {
-				method: "POST"
+			await fetch(getMagazineUrl(`print_magazine?user_id=${userId}`), {
+				method: "POST",
 			});
-        } catch (error) {
-            console.error(error);
-        }
-    };
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const closeModal = () => {
 		setIsOpen(false);

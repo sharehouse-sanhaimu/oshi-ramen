@@ -1,6 +1,7 @@
 "use client";
 
 import { RamenGallery } from "@/components/RamenGallery";
+import { MagazineModal } from "@/components/magazineModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -20,7 +21,6 @@ import type { Post } from "@/types/post";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { MagazineModal } from "@/components/magazineModal";
 
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
@@ -158,7 +158,8 @@ export default function Home() {
 									)}
 									<div className="flex flex-col items-center">
 										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
-										<MagazineModal userId={userId} />										<FormField
+										<MagazineModal userId={userId} />{" "}
+										<FormField
 											control={form.control}
 											name="file"
 											render={({ field }) => (
