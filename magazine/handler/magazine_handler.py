@@ -1,4 +1,5 @@
 import sys
+import requests
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -66,14 +67,15 @@ def magazine_handler(user_id: int):
     api_endpoint = os.getenv("API_ENDPOINT")
     url = f"{api_endpoint}/v1/s3"
     print("url:", url)
-
-    with open(BASE_OUT_DIR / "output_page.jpeg", "rb") as f:
-        files = {"file": ("output_page.jpeg", f, "image/jpeg")}
-        response = requests.post(
-            url, headers={"Content-Type": "application/json"}, files=files
-        )
-
-    print(response.text)
+    file_path = BASE_OUT_DIR / "output_page.jpeg"
+    try:
+        with open(file_path, "rb") as f:
+            files = {"file": (file_path.name, f.file, "image/jpeg")}
+            response = requests.post(url, files=files)
+            response.raise_for_status()  # HTTPエラーがあれば例外を発生させる
+            print(response.json())
+    except requests.exceptions.RequestException as e:
+        print(f"Error uploading to S3: {e}")
 
 
 if __name__ == "__main__":
