@@ -3,3 +3,8 @@ uvicorn
 reportlab
 pdf2image
 requests
+matplotlib
+pandas
+pycirclize
+japanize-matplotlib
+setuptools
