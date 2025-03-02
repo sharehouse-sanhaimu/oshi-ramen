@@ -1,6 +1,6 @@
 import { getUrl } from "./utils";
 
-export const getUserIcon = async (userId: string) => {
+export const getUserIcon = async (userId: number) => {
 	// http://localhost:8000/v1/users/1
 	return fetch(getUrl(`/v1/users/${userId}`), {
 		method: "GET",

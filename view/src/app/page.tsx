@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { compressImage } from "@/lib/compressImage";
-import { getUserIcon } from "@/lib/getUserIcon";
 import { getUrl } from "@/lib/utils";
 import type { RamenGalleryList } from "@/types/RamenGallery";
 import { postSchema } from "@/types/post";
@@ -29,7 +28,6 @@ export default function Home() {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [iconUrl, setIconUrl] = useState<string | null>(null);
-
 	const [gallery, setGallery] = useState<RamenGalleryList>([]);
 
 	const form = useForm<Post>({
@@ -46,7 +44,6 @@ export default function Home() {
 			soup_id: 3,
 		},
 	});
-
 
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
@@ -74,13 +71,20 @@ export default function Home() {
 						"Content-Type": "application/json",
 					},
 				});
-				if (!response.ok) {
+				const responseIcon = await fetch(getUrl(`/v1/users/${userId}`), {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (!response.ok || !responseIcon.ok) {
 					console.error("APIエラー:", response.status);
 					return;
 				}
 				const data = await response.json();
-				console.log("取得したデータ:", data);
+				const iconData = await responseIcon.json();
 				setGallery(data);
+				setIconUrl(iconData.data.icon_url);
 			} catch (error) {
 				console.error("Fetchエラー:", error);
 			}
@@ -144,15 +148,15 @@ export default function Home() {
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<Card className={`${isFile ? "hidden" : "m-4"}`}>
 								<div className="flex flex-initial justify-evenly items-center">
-									<img
-										src="/ramen/IMG_9358.jpeg"
-										alt="アイコン"
-										className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
-									/>
+									{iconUrl && (
+										<img
+											src={iconUrl}
+											alt="アイコン"
+											className="w-24 h-24 object-cover rounded-full border-0 shadow-lg"
+										/>
+									)}
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">
-											{userName}
-										</div>
+										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
 										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
 											雑誌印刷
 										</Card>
@@ -184,9 +188,7 @@ export default function Home() {
 																	if (files && files.length !== 0) {
 																		setIsFile(true);
 																		// 選択されたファイルのプレビューURLを生成
-																		setPreviewUrl(
-																			URL.createObjectURL(files[0]),
-																		);
+																		setPreviewUrl(URL.createObjectURL(files[0]));
 																	}
 																}}
 																ref={fileInputRef}

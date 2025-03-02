@@ -5,9 +5,9 @@ const storeStorageUser = (uid: string) => {
 	localStorage.setItem("userID", uid);
 };
 
-const storeStorageUserName	= (name: string) => {
+const storeStorageUserName = (name: string) => {
 	localStorage.setItem("userName", name);
-}
+};
 
 type responseJson = {
 	message: string;
