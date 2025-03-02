@@ -74,6 +74,9 @@ def magazine_handler(user_id: int):
             response = requests.post(url, files=files)
             response.raise_for_status()  # HTTPエラーがあれば例外を発生させる
             print(response.json())
+            img_url = response.json()["data"]["url"]
+            print(img_url)
+            return img_url
     except requests.exceptions.RequestException as e:
         print(f"Error uploading to S3: {e}")
 
