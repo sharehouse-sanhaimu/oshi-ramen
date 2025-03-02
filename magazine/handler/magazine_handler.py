@@ -70,7 +70,7 @@ def magazine_handler(user_id: int):
     file_path = BASE_OUT_DIR / "output_page.jpeg"
     try:
         with open(file_path, "rb") as f:
-            files = {"file": (file_path.name, f.file, "image/jpeg")}
+            files = {"file": (file_path.name, f, "image/jpeg")}
             response = requests.post(url, files=files)
             response.raise_for_status()  # HTTPエラーがあれば例外を発生させる
             print(response.json())

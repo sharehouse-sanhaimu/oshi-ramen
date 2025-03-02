@@ -3,11 +3,11 @@ module V1
     def create
       file = params[:file]
       s3_data = file.present? ? UploadToS3.call(file) : nil
-      if s!s3_data.nil?
+      if !s3_data.nil?
         render json: ResponseDto.new(
           message: 'Image saved successfully',
           data: {
-            url: s3_data.url
+            url: s3_data[:url]
           }
         ), status: :created
       else
