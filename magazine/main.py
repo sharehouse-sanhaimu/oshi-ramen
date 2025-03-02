@@ -15,6 +15,8 @@ print(f"EXECUTING_ENVIRONMENT: {EXECUTING_ENVIRONMENT}")
 origins = [
     os.getenv("ACSESS_ALLOW_URL"),  # Next.jsアプリケーションのオリジン
     # 必要に応じて他のオリジンも追加
+    "https://oshi-ramen-api.shaoba.tech",
+    "https://oshi-ramen.shaoba.tech",
 ]
 
 app.add_middleware(

@@ -75,13 +75,25 @@ logs-view:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f view
 
+prod-logs-view:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose -f compose.prod.yml logs -f view
+
 logs-api:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f api
 
+prod-logs-api:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose -f compose.prod.yml logs -f api
+
 logs-magazine:
 	@echo "Viewing Nextjs App logs..."
 	@docker compose logs -f magazine
+
+prod-logs-magazine:
+	@echo "Viewing Nextjs App logs..."
+	@docker compose -f compose.prod.yml logs -f magazine
 
 remove-branch:
 	@echo "Removing branch..."
