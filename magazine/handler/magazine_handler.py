@@ -8,6 +8,7 @@ from models.ramen_info import RamenInfo
 from modules.create_radar_chart import create_radar_chart
 from modules.fetch_ramen_info import fetch_ramen_info
 from modules.make_magazine import make_magazine
+from modules.pdf2jpeg import pdf2jpeg
 
 
 def magazine_handler(user_id: int):
@@ -54,6 +55,9 @@ def magazine_handler(user_id: int):
     out_path = BASE_OUT_DIR / "magazine.pdf"
     make_magazine(str(out_path), img_urls, radar_chart_path, ramen_info_list)
     print("Created magazine")
+
+    # Convert Magazine to Jpeg
+    pdf2jpeg(out_path, BASE_OUT_DIR / "output_page.jpeg")
 
 
 if __name__ == "__main__":

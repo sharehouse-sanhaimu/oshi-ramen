@@ -15,7 +15,7 @@ def fetch_ramen_info(id: str) -> list:
 
     extracted_data = []
     id_set = set()
-    while len(extracted_data) < 3 or len(response.json()) == len(id_set):
+    while len(extracted_data) < 3 or len(id_set) < len(response.json()):
         _id = random.randint(0, len(response.json()) - 1)
         if _id in id_set:
             continue

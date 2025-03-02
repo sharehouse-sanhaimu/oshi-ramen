@@ -225,11 +225,3 @@ if __name__ == "__main__":
     # 背景画像のパスを指定
     bgimg_path = "assets/ramen-magazine-template-2.png"
     out_path = "out/ramen_presentation.pdf"
-
-    make_magazine(
-        out_path,
-        images,
-        bgimg_path,
-        radar_charts,
-        ramen_info,
-    )
