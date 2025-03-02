@@ -25,6 +25,7 @@ import { MagazineModal } from "@/components/magazineModal";
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [gallery, setGallery] = useState<RamenGalleryList>([]);
@@ -75,7 +76,6 @@ export default function Home() {
 				const data = await response.json();
 				console.log("取得したデータ:", data);
 				setGallery(data);
-				// 必要に応じて state などへの反映を行う
 			} catch (error) {
 				console.error("Fetchエラー:", error);
 			}
@@ -86,6 +86,7 @@ export default function Home() {
 
 	const fileDelete = () => {
 		setIsFile(false);
+		setPreviewUrl(null);
 		form.setValue("file", null);
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
@@ -119,12 +120,11 @@ export default function Home() {
 		}
 
 		try {
-			const response = await fetch(getUrl("/v1/ramen"), {
+			await fetch(getUrl("/v1/ramen"), {
 				method: "POST",
-				body: formData, // Content-Type は自動的に設定されるので指定不要
+				body: formData,
 			});
 			window.location.reload();
-			// response の処理...
 		} catch (error) {
 			console.error(error);
 		}
@@ -137,177 +137,277 @@ export default function Home() {
 				<div className="flex flex-col">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							<div
-								className={`${isFile ? "hidden" : "flex flex-initial justify-evenly items-center"}`}
-							>
-								<img
-									src="/ramen/IMG_9358.jpeg"
-									alt="アイコン"
-									className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
-								/>
-								<div className="flex flex-col items-center">
-									<div className="p-2 font-extrabold text-gray-800">User Name</div>
-									<MagazineModal userId={userId} />
-									<FormField
-										control={form.control}
-										name="file"
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<div className="relative">
-														{/* カスタムボタンとして画像を表示 */}
-														<label
-															htmlFor="file-input"
-															className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
-														>
-															<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
-																投稿
-															</Card>
-														</label>
-
-														{/* 実際のファイル入力は非表示 */}
-														<Input
-															id="file-input"
-															type="file"
-															accept="image/*"
-															className="hidden"
-															onChange={(e) => {
-																const files = e.target.files;
-																field.onChange(files);
-																if (files?.length !== 0) {
-																	setIsFile(true);
-																}
-															}}
-														/>
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
+							<Card className={`${isFile ? "hidden" : "m-4"}`}>
+								<div className="flex flex-initial justify-evenly items-center">
+									<img
+										src="/ramen/IMG_9358.jpeg"
+										alt="アイコン"
+										className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 									/>
+									<div className="flex flex-col items-center">
+										<div className="p-2 font-extrabold text-gray-800">User Name</div>
+										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
+											雑誌印刷
+										</Card>
+										<FormField
+											control={form.control}
+											name="file"
+											render={({ field }) => (
+												<FormItem>
+													<FormControl>
+														<div className="relative">
+															{/* カスタムボタンとして画像を表示 */}
+															<label
+																htmlFor="file-input"
+																className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
+															>
+																<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
+																	投稿
+																</Card>
+															</label>
+															{/* 実際のファイル入力は非表示 */}
+															<Input
+																id="file-input"
+																type="file"
+																accept="image/*"
+																className="hidden"
+																onChange={(e) => {
+																	const files = e.target.files;
+																	field.onChange(files);
+																	if (files && files.length !== 0) {
+																		setIsFile(true);
+																		// 選択されたファイルのプレビューURLを生成
+																		setPreviewUrl(URL.createObjectURL(files[0]));
+																	}
+																}}
+																ref={fileInputRef}
+															/>
+														</div>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+									</div>
 								</div>
-							</div>
+							</Card>
 
 							{isFile ? (
-								<>
-									<FormField
-										control={form.control}
-										name="store_name"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">お店の名前</FormLabel>
-												<FormControl>
-													<Input placeholder="お店の名前" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
+								<div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
+									{/* プレビュー画像を表示 */}
+									<div className="flex flex-col items-center mb-6">
+										{previewUrl && (
+											<img
+												src={previewUrl}
+												alt="プレビュー画像"
+												className="w-40 h-40 object-cover rounded-2xl border-4 border-gray-300 shadow-lg"
+											/>
 										)}
-									/>
-									<FormField
-										control={form.control}
-										name="ramen_name"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">ラーメンの名前</FormLabel>
-												<FormControl>
-													<Input placeholder="ラーメンの名前" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="deliciousness_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">おいしさ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="おいしさ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="portion_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">量</FormLabel>
-												<FormControl>
-													<Input type="range" min={1} max={5} placeholder="量" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="thick_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">太さ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="太さ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="texture_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">麺の硬さ</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="コシ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="soup_id"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-black">あっさり・こってり</FormLabel>
-												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="コッテリ"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<Button type="submit">Submit</Button>
-									<Button onClick={handleClick}>キャンセル</Button>
-								</>
+										<p className="mt-4 text-lg font-medium text-gray-800">
+											ラーメン情報を入力
+										</p>
+									</div>
+									<div className="space-y-6 p-4 m-4">
+										<FormField
+											control={form.control}
+											name="store_name"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														お店の名前
+													</FormLabel>
+													<FormControl>
+														<Input
+															placeholder="お店の名前"
+															{...field}
+															className="w-full text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="ramen_name"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														ラーメンの名前
+													</FormLabel>
+													<FormControl>
+														<Input
+															placeholder="ラーメンの名前"
+															{...field}
+															className="w-full text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+														/>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="deliciousness_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														おいしさ
+													</FormLabel>
+													<FormControl>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="美味しさ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>まずい</span>
+																<span>美味しい</span>
+															</div>
+														</div>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="portion_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														量
+													</FormLabel>
+													<FormControl>
+														<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="量"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>少なめ</span>
+																<span>多い</span>
+															</div>
+														</div>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+										<FormField
+											control={form.control}
+											name="thick_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														太さ
+													</FormLabel>
+													<FormControl>
+														<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="太さ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>細い</span>
+																<span>太い</span>
+															</div>
+														</div>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="texture_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														麺の硬さ
+													</FormLabel>
+													<FormControl>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="コシ"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>柔らかい</span>
+																<span>固い</span>
+															</div>
+														</div>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+
+										<FormField
+											control={form.control}
+											name="soup_id"
+											render={({ field }) => (
+												<FormItem className="flex flex-col">
+													<FormLabel className="mb-2 font-semibold text-gray-700">
+														あっさり・こってり
+													</FormLabel>
+													<FormControl>
+													<div>
+															<Input
+																type="range"
+																min={1}
+																max={5}
+																placeholder="こってり"
+																{...field}
+																className="w-full accent-indigo-500"
+															/>
+															<div className="flex justify-between text-xs text-gray-600 mt-2">
+																<span>あっさり</span>
+																<span>こってり</span>
+															</div>
+														</div>
+													</FormControl>
+													<FormMessage className="mt-1 text-sm text-red-500" />
+												</FormItem>
+											)}
+										/>
+									</div>
+
+									<div className="flex justify-between mt-8">
+										<Button
+											type="submit"
+											className="px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition"
+										>
+											Submit
+										</Button>
+										<Button
+											onClick={handleClick}
+											className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+										>
+											キャンセル
+										</Button>
+									</div>
+								</div>
 							) : (
 								<RamenGallery gallery={gallery} />
 							)}

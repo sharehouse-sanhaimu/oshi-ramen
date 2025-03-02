@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from routes import test
+from routes import make_magazine
+from routes import print_magazine
 
 app = FastAPI()
 
@@ -29,6 +31,8 @@ if EXECUTING_ENVIRONMENT == "prod":
 
 elif EXECUTING_ENVIRONMENT == "dev":
     app.include_router(test.router)
+    app.include_router(make_magazine.router)
+    app.include_router(print_magazine.router)
 
 else:
     pass
