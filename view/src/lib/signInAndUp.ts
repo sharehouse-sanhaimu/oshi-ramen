@@ -5,6 +5,10 @@ const storeStorageUser = (uid: string) => {
 	localStorage.setItem("userID", uid);
 };
 
+const storeStorageUserName = (name: string) => {
+	localStorage.setItem("userName", name);
+};
+
 type responseJson = {
 	message: string;
 	data: {
@@ -42,6 +46,7 @@ export const signInOrUp = async (firebaseUser: FirebaseUser) => {
 		const responseJson = (await res.json()) as responseJson;
 		const uid = responseJson.data.id;
 		storeStorageUser(uid);
+		storeStorageUserName(firebaseUser.displayName || "User Name");
 
 		toRoot();
 		return uid;
