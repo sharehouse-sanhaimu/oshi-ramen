@@ -2,10 +2,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from routes import test
-from routes import make_magazine
-from routes import print_magazine
+from routes import make_magazine, print_magazine, test
 
 app = FastAPI()
 
@@ -14,15 +11,16 @@ print(f"EXECUTING_ENVIRONMENT: {EXECUTING_ENVIRONMENT}")
 
 origins = [
     os.getenv("ACSESS_ALLOW_URL"),  # Next.jsアプリケーションのオリジン
+    "http://localhost:3000",  # Next.jsのオリジンを許可
     # 必要に応じて他のオリジンも追加
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 許可するオリジンのリスト
+    allow_origins=origins,  # 許可するオリジン
     allow_credentials=True,
-    allow_methods=["*"],  # すべてのメソッドを許可
-    allow_headers=["*"],  # すべてのヘッダーを許可
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
