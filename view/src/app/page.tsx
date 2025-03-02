@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 export default function Home() {
 	const [userId, setUserId] = useState<number | null>(null);
 	const [isFile, setIsFile] = useState<boolean>(false);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [gallery, setGallery] = useState<RamenGalleryList>([]);
@@ -74,7 +75,6 @@ export default function Home() {
 				const data = await response.json();
 				console.log("取得したデータ:", data);
 				setGallery(data);
-				// 必要に応じて state などへの反映を行う
 			} catch (error) {
 				console.error("Fetchエラー:", error);
 			}
@@ -85,6 +85,7 @@ export default function Home() {
 
 	const fileDelete = () => {
 		setIsFile(false);
+		setPreviewUrl(null);
 		form.setValue("file", null);
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
@@ -118,12 +119,11 @@ export default function Home() {
 		}
 
 		try {
-			const response = await fetch(getUrl("/v1/ramen"), {
+			await fetch(getUrl("/v1/ramen"), {
 				method: "POST",
-				body: formData, // Content-Type は自動的に設定されるので指定不要
+				body: formData,
 			});
 			window.location.reload();
-			// response の処理...
 		} catch (error) {
 			console.error(error);
 		}
@@ -137,62 +137,75 @@ export default function Home() {
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<Card className={`${isFile ? "hidden" : "m-4"}`}>
-							<div
-								className="flex flex-initial justify-evenly items-center"
-							>
-								<img
-									src="/ramen/IMG_9358.jpeg"
-									alt="アイコン"
-									className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
-								/>
-								<div className="flex flex-col items-center">
-									<div className="p-2 font-extrabold text-gray-800">User Name</div>
-									<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
-										雑誌印刷
-									</Card>
-									<FormField
-										control={form.control}
-										name="file"
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<div className="relative">
-														{/* カスタムボタンとして画像を表示 */}
-														<label
-															htmlFor="file-input"
-															className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
-														>
-															<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
-																投稿
-															</Card>
-														</label>
-
-														{/* 実際のファイル入力は非表示 */}
-														<Input
-															id="file-input"
-															type="file"
-															accept="image/*"
-															className="hidden"
-															onChange={(e) => {
-																const files = e.target.files;
-																field.onChange(files);
-																if (files?.length !== 0) {
-																	setIsFile(true);
-																}
-															}}
-														/>
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
+								<div className="flex flex-initial justify-evenly items-center">
+									<img
+										src="/ramen/IMG_9358.jpeg"
+										alt="アイコン"
+										className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 									/>
+									<div className="flex flex-col items-center">
+										<div className="p-2 font-extrabold text-gray-800">User Name</div>
+										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
+											雑誌印刷
+										</Card>
+										<FormField
+											control={form.control}
+											name="file"
+											render={({ field }) => (
+												<FormItem>
+													<FormControl>
+														<div className="relative">
+															{/* カスタムボタンとして画像を表示 */}
+															<label
+																htmlFor="file-input"
+																className="cursor-pointer w-20 h-20 bg-gray-200 rounded-full"
+															>
+																<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
+																	投稿
+																</Card>
+															</label>
+															{/* 実際のファイル入力は非表示 */}
+															<Input
+																id="file-input"
+																type="file"
+																accept="image/*"
+																className="hidden"
+																onChange={(e) => {
+																	const files = e.target.files;
+																	field.onChange(files);
+																	if (files && files.length !== 0) {
+																		setIsFile(true);
+																		// 選択されたファイルのプレビューURLを生成
+																		setPreviewUrl(URL.createObjectURL(files[0]));
+																	}
+																}}
+																ref={fileInputRef}
+															/>
+														</div>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+									</div>
 								</div>
-							</div>
 							</Card>
 
 							{isFile ? (
 								<div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
+									{/* プレビュー画像を表示 */}
+									<div className="flex flex-col items-center mb-6">
+										{previewUrl && (
+											<img
+												src={previewUrl}
+												alt="プレビュー画像"
+												className="w-40 h-40 object-cover rounded-2xl border-4 border-gray-300 shadow-lg"
+											/>
+										)}
+										<p className="mt-4 text-lg font-medium text-gray-800">
+											ラーメン情報を入力
+										</p>
+									</div>
 									<div className="space-y-6 p-4 m-4">
 										<FormField
 											control={form.control}
