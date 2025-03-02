@@ -1,8 +1,6 @@
 "use client";
 
 import { RamenGallery } from "@/components/RamenGallery";
-import type { RamenGalleryList } from "@/types/RamenGallery";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { compressImage } from "@/lib/compressImage";
 import { getUrl } from "@/lib/utils";
+import type { RamenGalleryList } from "@/types/RamenGallery";
 import { postSchema } from "@/types/post";
 import type { Post } from "@/types/post";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -100,7 +99,6 @@ export default function Home() {
 		if (data.file === null) {
 			throw new Error("ファイルが選択されていません");
 		}
-		console.log(data);
 		const compressedFile = await compressImage(data.file);
 		const formData = new FormData();
 
@@ -119,13 +117,12 @@ export default function Home() {
 			formData.append("file", compressedFile, compressedFile.name);
 		}
 
-		console.log("formData prepared");
 		try {
 			const response = await fetch(getUrl("/v1/ramen"), {
 				method: "POST",
-
 				body: formData, // Content-Type は自動的に設定されるので指定不要
 			});
+			window.location.reload();
 			// response の処理...
 		} catch (error) {
 			console.error(error);
@@ -148,9 +145,7 @@ export default function Home() {
 									className="w-24 h-24 object-cover rounded-full border-4 border-pink-600"
 								/>
 								<div className="flex flex-col items-center">
-									<div className="p-2 font-extrabold text-gray-800">
-										User Name
-									</div>
+									<div className="p-2 font-extrabold text-gray-800">User Name</div>
 									<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center">
 										雑誌印刷
 									</Card>
@@ -214,9 +209,7 @@ export default function Home() {
 										name="ramen_name"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel className="text-black">
-													ラーメンの名前
-												</FormLabel>
+												<FormLabel className="text-black">ラーメンの名前</FormLabel>
 												<FormControl>
 													<Input placeholder="ラーメンの名前" {...field} />
 												</FormControl>
@@ -250,13 +243,7 @@ export default function Home() {
 											<FormItem>
 												<FormLabel className="text-black">量</FormLabel>
 												<FormControl>
-													<Input
-														type="range"
-														min={1}
-														max={5}
-														placeholder="量"
-														{...field}
-													/>
+													<Input type="range" min={1} max={5} placeholder="量" {...field} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -305,9 +292,7 @@ export default function Home() {
 										name="soup_id"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel className="text-black">
-													あっさり・こってり
-												</FormLabel>
+												<FormLabel className="text-black">あっさり・こってり</FormLabel>
 												<FormControl>
 													<Input
 														type="range"
