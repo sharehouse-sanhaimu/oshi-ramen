@@ -146,10 +146,7 @@ export default function Home() {
 									/>
 									<div className="flex flex-col items-center">
 										<div className="p-2 font-extrabold text-gray-800">User Name</div>
-										<Card className="flex items-center justify-center p-1 w-28 h-10 bg-gray-800 m-1 text-white text-center rounded-lg shadow-sm">
-											雑誌印刷
-										</Card>
-										<FormField
+										<MagazineModal userId={userId} />										<FormField
 											control={form.control}
 											name="file"
 											render={({ field }) => (
