@@ -19,7 +19,7 @@ export function MagazineModal({ userId }: MagazineModalProps) {
 		setIsLoading(true);
 		try {
 			const response = await fetch(
-				getMagazineUrl(`make_magazine?user_id=${userId}`),
+				getMagazineUrl(`/make_magazine?user_id=${userId}`),
 				{
 					method: "POST",
 				},
@@ -37,7 +37,7 @@ export function MagazineModal({ userId }: MagazineModalProps) {
 	const handlePrintClick = async () => {
 		try {
 			setPrintMessage("印刷を受けつけました。ご確認ください。");
-			await fetch(getMagazineUrl(`print_magazine?user_id=${userId}`), {
+			await fetch(getMagazineUrl(`/print_magazine?user_id=${userId}`), {
 				method: "POST",
 			});
 		} catch (error) {
