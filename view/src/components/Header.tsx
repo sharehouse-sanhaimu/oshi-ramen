@@ -13,16 +13,10 @@ export const Header = () => {
 				<nav>
 					<ul className="flex space-x-6">
 						<li>
-							<Link href="/" className="hover:text-yellow-200 transition-colors duration-300">
-							</Link>
-						</li>
-						<li>
-							<Link href="/about" className="hover:text-yellow-200 transition-colors duration-300">
-							</Link>
-						</li>
-						<li>
-							<Link href="/contact" className="hover:text-yellow-200 transition-colors duration-300">
-							</Link>
+							<Link
+								href="/"
+								className="hover:text-yellow-200 transition-colors duration-300"
+							/>
 						</li>
 					</ul>
 				</nav>
