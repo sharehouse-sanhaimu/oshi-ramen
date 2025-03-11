@@ -16,6 +16,8 @@ services:
       - "3000:3000"
     env_file:
       - view.env
+    command: ["sh", "-c", "pnpm run start"]
+
 
   api:
     build:
