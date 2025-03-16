@@ -49,23 +49,7 @@ export default function Home() {
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
 		const userName = localStorage.getItem("userName");
-		const userIDNum = Number(userID);
-		if (userID) {
-			setUserId(userIDNum);
-			setUserName(userName);
-		} else {
-			setUserId(null);
-		}
-	}, []);
-
-	useEffect(() => {
-		if (!userId) return;
-
-		// userId をフォームにセット
-		form.setValue("user_id", userId);
-
-		// 非同期関数で API を呼び出す
-		const fetchRamen = async () => {
+		const fetchRamen = async (userId: number) => {
 			try {
 				const response = await fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
 					headers: {
@@ -90,9 +74,54 @@ export default function Home() {
 				console.error("Fetchエラー:", error);
 			}
 		};
+		try {
+			if (userID) {
+				const userIDNum = Number(userID);
+				setUserId(userIDNum);
+				setUserName(userName);
+				form.setValue("user_id", userIDNum);
+				fetchRamen(userIDNum);
+			} else {
+				setUserId(null);
+			}
+		} catch (error) {}
+	}, [form]);
 
-		fetchRamen();
-	}, [userId, form]);
+	// useEffect(() => {
+	// 	if (!userId) return;
+
+	// 	// userId をフォームにセット
+	// 	form.setValue("user_id", userId);
+
+	// 	// 非同期関数で API を呼び出す
+	// 	const fetchRamen = async () => {
+	// 		try {
+	// 			const response = await fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
+	// 				headers: {
+	// 					"Content-Type": "application/json",
+	// 				},
+	// 			});
+	// 			const responseIcon = await fetch(getUrl(`/v1/users/${userId}`), {
+	// 				method: "GET",
+	// 				headers: {
+	// 					"Content-Type": "application/json",
+	// 				},
+	// 			});
+	// 			if (!response.ok || !responseIcon.ok) {
+	// 				console.error("APIエラー:", response.status);
+	// 				return;
+	// 			}
+	// 			const data = await response.json();
+	// 			const iconData = await responseIcon.json();
+	// 			setGallery(data);
+	// 			setIconUrl(iconData.data.icon_url);
+	// 		} catch (error) {
+	// 			console.error("Fetchエラー:", error);
+	// 		}
+	// 	};
+
+	// 	fetchRamen();
+	// }, [userId, form]);
 
 	const fileDelete = () => {
 		setIsFile(false);
@@ -141,12 +170,13 @@ export default function Home() {
 	};
 
 	return (
-		<div className="flex flex-col min-h-screen py-10 bg-gradient-to-t from-emerald-100 via-yellow-100 to-amber-100">
+		<div className="flex flex-col min-h-screen py-10">
 			{/* スマホサイズに制限するコンテナ */}
 			<div className="w-full mx-auto">
 				<div className="flex flex-col">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+							{/* <header className="fixed top-0 w-full z-50 bg-white shadow-lg"> */}
 							<Card className={`${isFile ? "hidden" : "m-4"}`}>
 								<div className="flex flex-initial justify-evenly items-center">
 									{iconUrl && (
@@ -157,7 +187,9 @@ export default function Home() {
 										/>
 									)}
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
+										<div className="p-2 font-extrabold text-gray-800">
+											{userName}
+										</div>
 										<MagazineModal userId={userId} />{" "}
 										<FormField
 											control={form.control}
@@ -187,7 +219,9 @@ export default function Home() {
 																	if (files && files.length !== 0) {
 																		setIsFile(true);
 																		// 選択されたファイルのプレビューURLを生成
-																		setPreviewUrl(URL.createObjectURL(files[0]));
+																		setPreviewUrl(
+																			URL.createObjectURL(files[0]),
+																		);
 																	}
 																}}
 																ref={fileInputRef}
@@ -201,6 +235,7 @@ export default function Home() {
 									</div>
 								</div>
 							</Card>
+							{/* </header> */}
 
 							{isFile ? (
 								<div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">

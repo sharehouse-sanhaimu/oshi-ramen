@@ -24,7 +24,7 @@ export default function RootLayout({
 		<SessionProvider>
 			<html lang="ja">
 				<body
-					className={`${inter.className} min-h-screen flex flex-col bg-amber-500 text-white`}
+					className={`${inter.className} min-h-screen flex flex-col bg-gradient-to-r from-blue-100 to-purple-100 text-white`}
 				>
 					<Header />
 					<main className="flex-1">{children}</main>
