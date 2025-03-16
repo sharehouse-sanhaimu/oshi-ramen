@@ -153,9 +153,7 @@ export default function Home() {
 										/>
 									)}
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">
-											{userName}
-										</div>
+										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
 										<MagazineModal userId={userId} />{" "}
 										<FormField
 											control={form.control}
@@ -185,9 +183,7 @@ export default function Home() {
 																	if (files && files.length !== 0) {
 																		setIsFile(true);
 																		// 選択されたファイルのプレビューURLを生成
-																		setPreviewUrl(
-																			URL.createObjectURL(files[0]),
-																		);
+																		setPreviewUrl(URL.createObjectURL(files[0]));
 																	}
 																}}
 																ref={fileInputRef}
