@@ -49,45 +49,63 @@ export default function Home() {
 	const { setValue } = form;
 
 	useEffect(() => {
-		const userID = localStorage.getItem("userID");
-		const userName = localStorage.getItem("userName");
-		const fetchRamen = async (userId: number) => {
+		const init = async () => {
 			try {
-				const response = await fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-				const responseIcon = await fetch(getUrl(`/v1/users/${userId}`), {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-				if (!response.ok || !responseIcon.ok) {
-					console.error("APIエラー:", response.status);
-					return;
+				const userID = localStorage.getItem("userID");
+				const userName = localStorage.getItem("userName");
+
+				if (userID) {
+					const userIDNum = Number(userID);
+					setUserId(userIDNum);
+					setUserName(userName);
+					const res = await fetchRamen(userIDNum);
+					if (res) {
+						setGallery(res.ramen);
+						setIconUrl(res.icon);
+					}
+					setValue("user_id", userIDNum);
+				} else {
+					setUserId(null);
 				}
-				const data = await response.json();
-				const iconData = await responseIcon.json();
-				setGallery(data);
-				setIconUrl(iconData.data.icon_url);
 			} catch (error) {
-				console.error("Fetchエラー:", error);
+				console.error("Initエラー:", error);
 			}
 		};
-		try {
-			if (userID) {
-				const userIDNum = Number(userID);
-				setUserId(userIDNum);
-				setUserName(userName);
-				setValue("user_id", userIDNum);
-				fetchRamen(userIDNum);
-			} else {
-				setUserId(null);
-			}
-		} catch (error) {}
+		init();
 	}, [setValue]);
+
+	const fetchRamen = async (
+		userId: number,
+	): Promise<{ ramen: RamenGalleryList; icon: string } | undefined> => {
+		try {
+			// 並列で fetch を実行
+			const [ramenResponse, iconResponse] = await Promise.all([
+				fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
+					headers: { "Content-Type": "application/json" },
+				}),
+				fetch(getUrl(`/v1/users/${userId}`), {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				}),
+			]);
+			// 両方のレスポンスが ok か確認
+			if (!ramenResponse.ok || !iconResponse.ok) {
+				console.error("APIエラー:", ramenResponse.status, iconResponse.status);
+				return;
+			}
+			// 並列で JSON パースを実行
+			const [data, iconData] = await Promise.all([
+				ramenResponse.json(),
+				iconResponse.json(),
+			]);
+			return {
+				ramen: data,
+				icon: iconData.data.icon_url,
+			};
+		} catch (error) {
+			console.error("Fetchエラー:", error);
+		}
+	};
 
 	const fileDelete = () => {
 		setIsFile(false);
@@ -153,7 +171,9 @@ export default function Home() {
 										/>
 									)}
 									<div className="flex flex-col items-center">
-										<div className="p-2 font-extrabold text-gray-800">{userName}</div>
+										<div className="p-2 font-extrabold text-gray-800">
+											{userName}
+										</div>
 										<MagazineModal userId={userId} />{" "}
 										<FormField
 											control={form.control}
@@ -183,7 +203,9 @@ export default function Home() {
 																	if (files && files.length !== 0) {
 																		setIsFile(true);
 																		// 選択されたファイルのプレビューURLを生成
-																		setPreviewUrl(URL.createObjectURL(files[0]));
+																		setPreviewUrl(
+																			URL.createObjectURL(files[0]),
+																		);
 																	}
 																}}
 																ref={fileInputRef}
