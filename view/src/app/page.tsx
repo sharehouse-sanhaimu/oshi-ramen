@@ -46,6 +46,8 @@ export default function Home() {
 		},
 	});
 
+	const { setValue } = form;
+
 	useEffect(() => {
 		const userID = localStorage.getItem("userID");
 		const userName = localStorage.getItem("userName");
@@ -79,49 +81,13 @@ export default function Home() {
 				const userIDNum = Number(userID);
 				setUserId(userIDNum);
 				setUserName(userName);
-				form.setValue("user_id", userIDNum);
+				setValue("user_id", userIDNum);
 				fetchRamen(userIDNum);
 			} else {
 				setUserId(null);
 			}
 		} catch (error) {}
-	}, [form]);
-
-	// useEffect(() => {
-	// 	if (!userId) return;
-
-	// 	// userId をフォームにセット
-	// 	form.setValue("user_id", userId);
-
-	// 	// 非同期関数で API を呼び出す
-	// 	const fetchRamen = async () => {
-	// 		try {
-	// 			const response = await fetch(getUrl(`/v1/ramen?user_id=${userId}`), {
-	// 				headers: {
-	// 					"Content-Type": "application/json",
-	// 				},
-	// 			});
-	// 			const responseIcon = await fetch(getUrl(`/v1/users/${userId}`), {
-	// 				method: "GET",
-	// 				headers: {
-	// 					"Content-Type": "application/json",
-	// 				},
-	// 			});
-	// 			if (!response.ok || !responseIcon.ok) {
-	// 				console.error("APIエラー:", response.status);
-	// 				return;
-	// 			}
-	// 			const data = await response.json();
-	// 			const iconData = await responseIcon.json();
-	// 			setGallery(data);
-	// 			setIconUrl(iconData.data.icon_url);
-	// 		} catch (error) {
-	// 			console.error("Fetchエラー:", error);
-	// 		}
-	// 	};
-
-	// 	fetchRamen();
-	// }, [userId, form]);
+	}, [setValue]);
 
 	const fileDelete = () => {
 		setIsFile(false);
