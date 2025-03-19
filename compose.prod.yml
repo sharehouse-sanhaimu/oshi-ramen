@@ -9,21 +9,26 @@ services:
     build:
       context: ./view
       dockerfile: prod.Dockerfile
-    volumes:
-      - ./view:/app
-      - ./view/.pnpm-store:/app/.pnpm-store
+      args:
+        - NEXT_PUBLIC_APP_ENV=${NEXT_PUBLIC_APP_ENV}
+        - NEXT_PUBLIC_APIKEY=${NEXT_PUBLIC_APIKEY}
+        - NEXT_PUBLIC_AUTHDOMAIN=${NEXT_PUBLIC_AUTHDOMAIN}
+        - NEXT_PUBLIC_PROJECTID=${NEXT_PUBLIC_PROJECTID}
+        - NEXT_PUBLIC_STORAGEBUCKET=${NEXT_PUBLIC_STORAGEBUCKET}
+        - NEXT_PUBLIC_MESSAGINGSENDERID=${NEXT_PUBLIC_MESSAGINGSENDERID}
+        - NEXT_PUBLIC_APPID=${NEXT_PUBLIC_APPID}
+        - NEXT_PUBLIC_MEASUREMENTID=${NEXT_PUBLIC_MEASUREMENTID}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_MAGAZINE_URL=${NEXT_PUBLIC_MAGAZINE_URL}
+    container_name: prod-view
     ports:
       - "3000:3000"
-    env_file:
-      - view.env
-    command: ["sh", "-c", "pnpm run start"]
-
 
   api:
     build:
       context: ./api
       dockerfile: api.Dockerfile
-    container_name: api
+    container_name: prod-api
     ports:
       - "8000:8000"
     env_file:
@@ -43,6 +48,7 @@ services:
       context: ./magazine
     volumes:
       - ./magazine:/magazine
+    container_name: prod-magazine
     ports:
       - "9004:9004"
     command: uvicorn main:app --reload --host 0.0.0.0 --port 9004

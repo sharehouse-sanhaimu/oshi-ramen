@@ -5,6 +5,7 @@
 view.env
 api.env
 magazine.env
+.env
 
 # Python
 __pycache__/
