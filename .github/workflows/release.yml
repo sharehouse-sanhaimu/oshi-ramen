@@ -18,7 +18,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - env:
+
+      - id: bump
+        name: Bump version and tag repository
+        env:
           USERNAME: github-actions[bot]
           EMAIL: github-actions[bot]@users.noreply.github.com
           BUMP_LEVEL: ${{ inputs.bump-level }}
@@ -27,3 +30,7 @@ jobs:
           git config --global user.name "${USERNAME}"
           git config --global user.email "${EMAIL}"
           version="$(.github/scripts/bump.sh "${BUMP_LEVEL}")"
+          echo "New version: ${version}"
+          echo "new_version=${version}" >> $GITHUB_OUTPUT
+
+      # 以下、別のworkflow_runなどでこの出力値を利用してDockerイメージのビルド・pushを実施するワークフローを作成する
