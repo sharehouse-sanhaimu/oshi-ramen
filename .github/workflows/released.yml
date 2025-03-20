@@ -37,11 +37,21 @@ jobs:
           cat .env >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      # 4. Docker Buildxのセットアップ
+      # 4. 最新のタグを取得するシェルスクリプトを実行
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          # タグ情報を最新にするためにfetchする
+          git fetch --tags
+          latest_tag=$(git tag --sort=-v:refname | head -n 1)
+          echo "Latest tag: $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+
+      # 5. Docker Buildxのセットアップ
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # 5. Docker Hubへログイン
+      # 6. Docker Hubへログイン
       - name: Docker Login
         uses: docker/login-action@v1
         with:
@@ -49,16 +59,14 @@ jobs:
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASS }}
 
-      # 6. Dockerイメージのビルドとpush
+      # 7. Dockerイメージのビルドとpush（最新タグを利用）
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          # リリースタグとlatestの2種類を付与
           tags: |
-            ${{ matrix.image_name }}:${{ github.event.workflow_run.head_commit.message }}
+            ${{ matrix.image_name }}:${{ steps.get_tag.outputs.latest_tag }}
             ${{ matrix.image_name }}:latest
-          # .envファイルの内容（各行 "KEY=VALUE" 形式）をそのままbuild-argsとして渡す
           build-args: ${{ steps.build_args.outputs.args }}
