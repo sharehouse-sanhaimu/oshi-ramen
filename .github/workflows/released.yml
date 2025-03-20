@@ -1,8 +1,9 @@
 name: Release Docker Build and Push
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*" # 例: v1.0.0 のようなタグにマッチ
 
 jobs:
   build-and-push:
