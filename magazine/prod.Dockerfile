@@ -28,19 +28,25 @@ COPY . .
 # ======================
 # Stage 2: Runner using distroless (nonroot)
 # ======================
-FROM gcr.io/distroless/python3-debian12:nonroot as runner
+FROM python:3.11-slim
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    poppler-utils \
+    python3-distutils \
+ && rm -rf /var/lib/apt/lists/*
 
 # PYTHONPATH をランタイム依存ディレクトリに設定
 ENV PYTHONPATH=/app/venv
 
 # builder から、ランタイムに必要な site‑packages 部分だけをコピー
 COPY --from=builder /install/lib/python3.11/site-packages /app/venv
+
 # アプリケーションコードをコピー
 COPY --from=builder /app /app
 
 EXPOSE 9004
 
 # Python の ENTRYPOINT が python3 となっているため、モジュール実行形式に変更
-CMD ["-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9004"]
+CMD ["python","-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9004"]
