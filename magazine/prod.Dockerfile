@@ -1,24 +1,23 @@
 # ======================
 # Stage 1: Builder
 # ======================
-FROM python:3.11-slim as builder
+FROM python:3.11-alpine as builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# ビルドに必要なパッケージをインストール
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+# ビルドに必要なパッケージをapkでインストール
+RUN apk add --no-cache \
+    build-base \
     poppler-utils \
-    python3-distutils \
- && rm -rf /var/lib/apt/lists/*
+    python3-dev
 
 # 依存関係ファイルのコピー
 COPY requirements.txt .
 
-# 依存パッケージを /install にインストール（不要なファイルを含めず、ランタイム成果物だけを取得）
+# 依存パッケージを /install にインストール
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir --prefix=/install -r requirements.txt
 
@@ -26,27 +25,25 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # ======================
-# Stage 2: Runner using distroless (nonroot)
+# Stage 2: Runner
 # ======================
-FROM python:3.11-slim
+FROM python:3.11-alpine
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    poppler-utils \
-    python3-distutils \
- && rm -rf /var/lib/apt/lists/*
+# ランタイムに必要なパッケージのみインストール（poppler-utils は必要）
+RUN apk add --no-cache poppler-utils
 
-# PYTHONPATH をランタイム依存ディレクトリに設定
-ENV PYTHONPATH=/app/venv
+# ※ Alpine の公式イメージでは、Python の標準ライブラリに distutils が含まれている場合が多いです。
+# もし実行時に distutils が見つからない場合、下記のようにビルダーから distutils をコピーすることを検討してください。
+# COPY --from=builder /usr/local/lib/python3.11/distutils /usr/local/lib/python3.11/distutils
 
-# builder から、ランタイムに必要な site‑packages 部分だけをコピー
-COPY --from=builder /install/lib/python3.11/site-packages /app/venv
+# builder から、インストール済みのPythonパッケージを/usr/localにコピー
+COPY --from=builder /install /usr/local
 
 # アプリケーションコードをコピー
 COPY --from=builder /app /app
 
 EXPOSE 9004
 
-# Python の ENTRYPOINT が python3 となっているため、モジュール実行形式に変更
-CMD ["python","-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9004"]
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9004"]
