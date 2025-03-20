@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/python3-debian12:nonroot AS runner
+FROM python:3.11
 
 WORKDIR /magazine
 
