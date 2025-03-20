@@ -1,7 +1,7 @@
 # ======================
 # Stage 1: Builder
 # ======================
-FROM python:3.11-alpine as builder
+FROM python:3.11-alpine AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
