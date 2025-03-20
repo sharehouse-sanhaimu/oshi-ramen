@@ -9,26 +9,36 @@ app = FastAPI()
 EXECUTING_ENVIRONMENT = os.getenv("EXECUTING_ENVIRONMENT")
 print(f"EXECUTING_ENVIRONMENT: {EXECUTING_ENVIRONMENT}")
 
-origins = [
-    os.getenv("ACSESS_ALLOW_URL"),  # Next.jsアプリケーションのオリジン
+origins_dev = [
     "http://localhost:3000",  # Next.jsのオリジンを許可
-    "https://oshi-ramen.shaoba.tech",
-    "https://oshi-ramen-api.shaoba.tech",
+    "http://localhost:8000",  # FastAPIのオリジンを許可
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,  # 許可するオリジン
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+origins_prod = ["https://oshi-ramen.shaoba.tech", "https://oshi-ramen-api.shaoba.tech"]
 
 
 if EXECUTING_ENVIRONMENT == "prod":
-    pass
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins_prod,  # 許可するオリジン
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(test.router)
+    app.include_router(make_magazine.router)
+    app.include_router(print_magazine.router)
+
 
 elif EXECUTING_ENVIRONMENT == "dev":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins_dev,  # 許可するオリジン
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.include_router(test.router)
     app.include_router(make_magazine.router)
     app.include_router(print_magazine.router)
