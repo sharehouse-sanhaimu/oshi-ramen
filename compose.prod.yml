@@ -8,7 +8,7 @@ services:
   view:
     build:
       context: ./view
-      # dockerfile: prod.Dockerfile
+      dockerfile: prod.Dockerfile
       args:
         - NEXT_PUBLIC_APP_ENV=${NEXT_PUBLIC_APP_ENV}
         - NEXT_PUBLIC_APIKEY=${NEXT_PUBLIC_APIKEY}
