@@ -9,3 +9,6 @@ magazine.env
 
 # Python
 __pycache__/
+
+# db
+postgres/

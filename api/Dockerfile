@@ -1,77 +1,44 @@
 # syntax=docker/dockerfile:1
-# check=error=true
-
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t api .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name api api
-
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.4.1
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM ruby:3.4.1-slim
 
 # 必要なディレクトリを作成
 RUN mkdir -p /usr/local/bundle/bin
 RUN chmod 777 /usr/local/bundle/bin
 
-# Rails app lives here
+
+# 必要なパッケージのインストール
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      build-essential \
+      libpq-dev \
+      nodejs \
+      sqlite3 \
+      libvips \
+      curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Rails ユーザーとグループを作成
+RUN groupadd -r rails && useradd -r -g rails rails
+
+# 作業ディレクトリを作成
 WORKDIR /api
 
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# BUNDLE_PATHとPATHを設定
+ENV BUNDLE_PATH=/usr/local/bundle
+ENV PATH="/usr/local/bundle/bin:$PATH"
 
-# Set production environment
-ENV RAILS_ENV="development" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development" \
-    BUNDLE_FROZEN="false"
-
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install application gems
+# Gemfile と Gemfile.lock をコピー
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --no-deployment && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
 
-# Copy application code
+# 作成した rails ユーザーが /usr/local/bundle に書き込めるように所有権を変更し、bundle install を実行
+RUN chown -R rails:rails /usr/local/bundle && \
+    bundle install --path "$BUNDLE_PATH"
+
+# アプリケーションの全ソースをコピー
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# 開発用サーバーのポートを公開
+EXPOSE 3000
 
-
-
-
-# Final stage for app image
-FROM base
-
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /api /api
-
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails /api
-USER 1000:1000
-
-# rails のシンボリックリンクを作成
-RUN ln -s /usr/local/bundle/ruby/3.4.0/bin/rails /usr/local/bundle/bin/rails
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/api/bin/docker-entrypoint"]
-
-# Start server via Thruster by default, this can be overwritten at runtime
-CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "8000"]
-
+# コンテナ起動時はRailsサーバーを起動
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
