@@ -58,7 +58,7 @@ jobs:
           push: true
           # リリースタグとlatestの2種類を付与
           tags: |
-            ${{ matrix.image_name }}:${{ github.event.release.tag_name }}
+            ${{ matrix.image_name }}:${{ github.event.workflow_run.head_commit.message }}
             ${{ matrix.image_name }}:latest
           # .envファイルの内容（各行 "KEY=VALUE" 形式）をそのままbuild-argsとして渡す
           build-args: ${{ steps.build_args.outputs.args }}
