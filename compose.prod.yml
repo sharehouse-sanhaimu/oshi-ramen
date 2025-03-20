@@ -27,7 +27,7 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: api.Dockerfile
+      dockerfile: prod.Dockerfile
     container_name: prod-api
     ports:
       - "8000:8000"
@@ -54,3 +54,16 @@ services:
     command: uvicorn main:app --reload --host 0.0.0.0 --port 9004
     env_file:
       - magazine.env
+
+  db:
+    image: postgres:15
+    container_name: prod_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: myapp_production
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

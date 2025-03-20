@@ -20,16 +20,16 @@ test:
 production:
   primary:
     <<: *default
-    database: myapp_production
+    database: oshimen_production
   cache:
     <<: *default
-    database: myapp_production_cache
+    database: oshimen_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: myapp_production_queue
+    database: oshimen_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: myapp_production_cable
+    database: oshimen_production_cable
     migrations_paths: db/cable_migrate
