@@ -27,6 +27,11 @@ jobs:
       # 1. リポジトリのチェックアウト
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List api directory
+        run: ls -l api
 
       # 2. Secretsから.envファイルを作成
       - name: Create .env file from Secrets
@@ -66,7 +71,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./${{ matrix.context }}
+          context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
           tags: |
