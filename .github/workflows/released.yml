@@ -13,11 +13,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - dockerfile: api/prod.Dockerfile
+          - context: api
+            dockerfile: prod.Dockerfile
             image_name: sharehause/oshi-ramen-api
-          - dockerfile: view/prod.Dockerfile
+          - context: view
+            dockerfile: prod.Dockerfile
             image_name: sharehause/oshi-ramen-view
-          - dockerfile: magazine/prod.Dockerfile
+          - context: magazine
+            dockerfile: prod.Dockerfile
             image_name: sharehause/oshi-ramen-magazine
 
     steps:
@@ -63,7 +66,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
           tags: |
