@@ -72,5 +72,5 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: true
           tags: |
-            ${{ matrix.image_name }}:${{ steps.get_tag.outputs.latest_tag }}
+            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ steps.get_tag.outputs.latest_tag }}
           build-args: ${{ steps.build_args.outputs.args }}
