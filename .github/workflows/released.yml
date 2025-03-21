@@ -14,13 +14,13 @@ jobs:
       matrix:
         include:
           - context: api
-            dockerfile: prod.Dockerfile
+            dockerfile: api/prod.Dockerfile
             image_name: sharehause/oshi-ramen-api
           - context: view
-            dockerfile: prod.Dockerfile
+            dockerfile: view/prod.Dockerfile
             image_name: sharehause/oshi-ramen-view
           - context: magazine
-            dockerfile: prod.Dockerfile
+            dockerfile: magazine/prod.Dockerfile
             image_name: sharehause/oshi-ramen-magazine
 
     steps:
