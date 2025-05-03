@@ -41,7 +41,7 @@ RUN pnpm run build
 FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runner
 
 WORKDIR /app
-LABEL org.opencontainers.image.source="https://github.com/NUTFes/FinanSu"
+LABEL org.opencontainers.image.source="https://github.com/sharehouse-sanhaimu/oshi-ramen"
 ENV NODE_ENV=production
 
 COPY --from=builder --chown=65532:65532 /app/.next/standalone /app/
