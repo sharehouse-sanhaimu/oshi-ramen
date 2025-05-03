@@ -80,9 +80,7 @@ Rails.application.configure do
   config.hosts = [
     # "localhost",
     # "localhost:3000",
-    "oshi-ramen.shaoba.tech",
     "oshi-ramen-api.shaoba.tech",     # Allow requests from example.com
-    "oshi-ramen-magazine.shaoba.tech"
   ]
   #
   # Skip DNS rebinding protection for the default health check endpoint.
