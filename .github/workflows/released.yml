@@ -96,7 +96,7 @@ jobs:
             type=registry,ref=${{ env.HARBOR }}/${{ matrix.image_name }}:cache
           cache-to: |
             type=gha,mode=max,scope=${{ matrix.image_name }}-cache
-            type=registry,ref=${{ env.HARBOR }}/${{ matrix.image_name }}:cache,mode=max
+            type=registry,ref=${{ env.HARBOR }}/${{ matrix.image_name }}:cache,mode=max,image-manifest=true
 
       # 9. Docker Buildxのキャッシュをプルーニング
       - name: Prune Buildx builder and caches
