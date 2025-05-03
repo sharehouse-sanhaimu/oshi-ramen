@@ -2,14 +2,23 @@ name: Release Docker Build and Push
 
 on:
   workflow_run:
-    workflows: ["Release action"] # 完了を待つワークフロー名
-    types:
-      - completed
+    workflows: ["Release action"]
+    types: [completed]
 
+permissions:
+  contents: read # 最小権限のみ許可
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true # 旧ジョブ自動キャンセル
 jobs:
   build-and-push:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30 # タイムアウト設定
+    env:
+      HARBOR: ${{ secrets.HARBOR_REG }}
+
     strategy:
       matrix:
         include:
@@ -24,7 +33,6 @@ jobs:
             image_name: sharehouse/oshi-ramen-magazine
 
     steps:
-      # 1. リポジトリのチェックアウト
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -38,7 +46,7 @@ jobs:
       - name: Generate build args from .env
         id: build_args
         run: |
-          echo "args<<EOF" >> $GITHUB_OUTPUT
+          echo "ARGS<<EOF" >> $GITHUB_OUTPUT
           cat .env >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -48,36 +56,50 @@ jobs:
         run: |
           # タグ情報を最新にするためにfetchする
           git fetch --tags
-          latest_tag=$(git tag --sort=-v:refname | head -n 1)
-          echo "Latest tag: $latest_tag"
-          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          TAG=$(git tag --sort=-v:refname | head -n1)
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
-      # 5. Docker Buildxのセットアップ
+      # 5. QEMUエミュレーションのセットアップ
+      - name: Set up QEMU for multi-arch
+        uses: docker/setup-qemu-action@v3 # QEMU エミュレーション
+
+      # 6. Docker Buildxのセットアップ
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v3 # 永続ビルダー設定
+        with:
+          install: true
+          buildkitd-flags: --debug
 
-      # 6. Docker Hubへログイン
+      # 7. Docker Hubへのログイン
       - name: Docker Login
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.HARBOR_REG }}
+          registry: ${{ env.HARBOR }}
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASS }}
 
-      # 7. Dockerイメージのビルドとpush（最新タグを利用）
+      # 8. Docker Buildxを使用してマルチアーキテクチャのDockerイメージをビルドし、プッシュ
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
+          pull: true # 常に最新イメージ取得
           push: true
           tags: |
-            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ steps.get_tag.outputs.latest_tag }}
-          build-args: ${{ steps.build_args.outputs.args }}
+            ${{ env.HARBOR }}/${{ matrix.image_name }}:${{ steps.get_tag.outputs.TAG }}
+            ${{ env.HARBOR }}/${{ matrix.image_name }}:latest
+          build-args: ${{ steps.build_args.outputs.ARGS }}
           cache-from: |
             type=gha,scope=${{ matrix.image_name }}-cache
-            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache
+            type=registry,ref=${{ env.HARBOR }}/${{ matrix.image_name }}:cache
           cache-to: |
             type=gha,mode=max,scope=${{ matrix.image_name }}-cache
-            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache,mode=max
+            type=registry,ref=${{ env.HARBOR }}/${{ matrix.image_name }}:cache,mode=max
+
+      # 9. Docker Buildxのキャッシュをプルーニング
+      - name: Prune Buildx builder and caches
+        if: always()
+        run: |
+          docker buildx prune --all --force
