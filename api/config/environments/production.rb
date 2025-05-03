@@ -79,7 +79,6 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     # "localhost",
-    # "localhost:3000",
     "oshi-ramen-api.shaoba.tech",     # Allow requests from example.com
   ]
   #
