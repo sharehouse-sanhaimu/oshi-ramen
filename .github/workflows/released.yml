@@ -75,3 +75,9 @@ jobs:
           tags: |
             ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ steps.get_tag.outputs.latest_tag }}
           build-args: ${{ steps.build_args.outputs.args }}
+          cache-from: |
+            type=gha,scope=${{ matrix.image_name }}-cache
+            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache
+          cache-to: |
+            type=gha,mode=max,scope=${{ matrix.image_name }}-cache
+            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache,mode=max
