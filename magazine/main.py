@@ -14,7 +14,7 @@ origins_dev = [
     "http://localhost:8000",  # FastAPIのオリジンを許可
 ]
 
-origins_prod = ["https://oshi-ramen.shaoba.tech", "https://oshi-ramen-api.shaoba.tech"]
+origins_prod = ["https://oshi-ramen.nosse.net", "https://oshi-ramen-api.nosse.net"]
 
 
 if EXECUTING_ENVIRONMENT == "prod":
