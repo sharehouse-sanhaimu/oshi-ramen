@@ -154,9 +154,9 @@ jobs:
       - name: edit-manifest
         run: |
           cd ${{ github.event.repository.name }}
-          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-view") .newTag = ${{ steps.get_tag.outputs.TAG }} ' kustomization.yml
-          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-api") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
-          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-magazine") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-view") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-api") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-magazine") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
 
       # ターゲットリポジトリのkustomization.ymlをコミットする
       - name: Commit changes
