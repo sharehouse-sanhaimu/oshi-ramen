@@ -3,6 +3,7 @@ require 'mime/types'
 
 class UploadToS3
   def self.call(file)
+    Rails.logger.info("region: #{ENV['AWS_REGION']}")
     s3 = Aws::S3::Client.new(
       region: ENV['AWS_REGION'],
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
