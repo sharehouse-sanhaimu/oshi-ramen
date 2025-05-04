@@ -24,6 +24,8 @@
     "source.organizeImports.biome": "explicit"
   },
   "[github-actions-workflow]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

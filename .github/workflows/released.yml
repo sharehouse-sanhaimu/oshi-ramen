@@ -105,3 +105,57 @@ jobs:
         if: always()
         run: |
           docker buildx prune --all --force
+
+  # docker buildが成功したら、kustomization.ymlを編集する
+  edit-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      # github appトークンを作成する
+      - name: Create github app token
+        id: create
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_KEY }}
+          repositories: ${{ secrets.TARGET_REPO }}
+
+      # github appトークンを使って、ターゲットリポジトリをチェックアウトする
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/${{ secrets.TARGET_REPO }}
+          path: ${{ github.event.repository.name }}
+          token: ${{ steps.create.outputs.token }}
+
+      # 最新のタグを取得するシェルスクリプトを実行
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          # タグ情報を最新にするためにfetchする
+          git fetch --tags
+          TAG=$(git tag --sort=-v:refname | head -n1)
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+      # ターゲットリポジトリのkustomization.ymlを編集するためにyqをインストールする
+      - name: Install yq
+        run: |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          chmod +x /usr/local/bin/yq
+
+      # ターゲットリポジトリのkustomization.ymlを編集する
+      - name: edit-manifest
+        working-directory: ${{ github.event.repository.name }}
+        run: |
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-view") .newTag = ${{ steps.get_tag.outputs.TAG }} ' kustomization.yml
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-api") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
+          yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-magazine") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
+
+      # ターゲットリポジトリのkustomization.ymlをコミットする
+      - name: Commit changes
+        working-directory: ${{ github.event.repository.name }}
+        run: |
+          git config --global user.name "${{ github.repository_owner }}"
+          git config --global user.email "${{ github.repository_owner }}@users.noreply.github.com"
+          git add -A
+          git commit -m "Update kustomization.yml with :${{ steps.get_tag.outputs.TAG }}"
+          git push
