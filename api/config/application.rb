@@ -32,15 +32,6 @@ module Api
     # dtoディレクトリをオートロードパスに追加
     config.autoload_paths += %W[#{config.root}/app/dto]
 
-    # CORS設定
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*' # 許可するオリジンを指定。'*'は全てのオリジンを許可。
-        resource '*',
-          headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head]
-      end
-    end
 
     # servicesディレクトリをオートロードパスに追加
     config.autoload_paths += %W[#{config.root}/app/services]
