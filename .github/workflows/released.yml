@@ -155,6 +155,9 @@ jobs:
       - name: edit-manifest
         working-directory: ${{ github.event.repository.name }}
         run: |
+          ls -la
+          echo "TAG=${{ steps.get_tag.outputs.TAG }}"
+          echo "directory=${{ github.event.repository.name }}"
           yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-view") .newTag = ${{ steps.get_tag.outputs.TAG }} ' kustomization.yml
           yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-api") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
           yq e -i '.images[] |= select(.name == "reg.nosse.net/sharehouse/oshi-ramen-magazine") .newTag = ${{ steps.get_tag.outputs.TAG }}' kustomization.yml
