@@ -108,6 +108,7 @@ jobs:
 
   # docker buildが成功したら、kustomization.ymlを編集する
   edit-manifest:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       # github appトークンを作成する
@@ -119,6 +120,23 @@ jobs:
           private-key: ${{ secrets.APP_KEY }}
           repositories: ${{ secrets.TARGET_REPO }}
 
+      # ソースリポジトリをチェックアウト（タグ情報取得用）
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # タグを含むすべての履歴を取得
+          path: source-repo
+
+      # 最新のタグを取得（ソースリポジトリから）
+      - name: Get latest tag
+        id: get_tag
+        working-directory: source-repo
+        run: |
+          # タグ情報を最新にするためにfetchする
+          git fetch --tags
+          TAG=$(git tag --sort=-v:refname | head -n1)
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
       # github appトークンを使って、ターゲットリポジトリをチェックアウトする
       - name: Checkout target repo
         uses: actions/checkout@v4
@@ -126,15 +144,6 @@ jobs:
           repository: ${{ github.repository_owner }}/${{ secrets.TARGET_REPO }}
           path: ${{ github.event.repository.name }}
           token: ${{ steps.create.outputs.token }}
-
-      # 最新のタグを取得するシェルスクリプトを実行
-      - name: Get latest tag
-        id: get_tag
-        run: |
-          # タグ情報を最新にするためにfetchする
-          git fetch --tags
-          TAG=$(git tag --sort=-v:refname | head -n1)
-          echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
       # ターゲットリポジトリのkustomization.ymlを編集するためにyqをインストールする
       - name: Install yq
