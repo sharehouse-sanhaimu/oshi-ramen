@@ -196,6 +196,6 @@ jobs:
     steps:
       - name: Trigger ArgoCD sync via API
         run: |
-          curl -X POST https://${{ secrets.HARBOR_REG }}/api/v1/applications/${{ github.event.repository.name }}/sync \
-          -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
-          -H "Content-Type: application/json"
+          curl -X POST https://${{ secrets.ARGOCD_URL }}/api/v1/applications/${{ github.event.repository.name }}/sync \
+            -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
+            -H "Content-Type: application/json"
