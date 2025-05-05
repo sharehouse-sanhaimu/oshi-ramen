@@ -15,6 +15,8 @@ jobs:
   release:
     timeout-minutes: 5
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.bump.outputs.new_version }}
     permissions:
       contents: write
     steps:
@@ -70,15 +72,6 @@ jobs:
           cat .env >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      # 最新のタグを取得するシェルスクリプトを実行
-      - name: Get latest tag
-        id: get_tag
-        run: |
-          # タグ情報を最新にするためにfetchする
-          git fetch --tags
-          TAG=$(git tag --sort=-v:refname | head -n1)
-          echo "TAG=$TAG" >> $GITHUB_OUTPUT
-
       # arm64アーキテクチャのビルドを行う場合は、以下のコメントアウトを解除してください
       # # QEMUエミュレーションのセットアップ
       # - name: Set up QEMU for multi-arch
@@ -111,7 +104,7 @@ jobs:
           pull: true # 常に最新イメージ取得
           push: true
           tags: |
-            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ steps.get_tag.outputs.TAG }}
+            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ needs.release.outputs.tag }}
             ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:latest
           build-args: ${{ steps.build_args.outputs.ARGS }}
           cache-from: |
@@ -129,7 +122,9 @@ jobs:
 
   # docker buildが成功したら、kustomization.ymlを編集する
   edit-manifest:
-    needs: build-and-push
+    needs:
+      - release
+      - build-and-push
     runs-on: ubuntu-latest
     steps:
       # github appトークンを作成する
@@ -140,23 +135,6 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_KEY }}
           repositories: ${{ secrets.TARGET_REPO }}
-
-      # ソースリポジトリをチェックアウト（タグ情報取得用）
-      - name: Checkout source repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # タグを含むすべての履歴を取得
-          path: source-repo
-
-      # 最新のタグを取得（ソースリポジトリから）
-      - name: Get latest tag
-        id: get_tag
-        working-directory: source-repo
-        run: |
-          # タグ情報を最新にするためにfetchする
-          git fetch --tags
-          TAG=$(git tag --sort=-v:refname | head -n1)
-          echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
       # github appトークンを使って、ターゲットリポジトリをチェックアウトする
       - name: Checkout target repo
@@ -175,9 +153,9 @@ jobs:
       - name: edit-manifest
         run: |
           cd ${{ github.event.repository.name }}
-          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-view") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
-          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-api") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
-          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-magazine") .newTag = "${{ steps.get_tag.outputs.TAG }}"' kustomization.yml
+          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-view") .newTag = "${{ needs.release.outputs.tag }}"' kustomization.yml
+          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-api") .newTag = "${{ needs.release.outputs.tag }}"' kustomization.yml
+          yq e -i '.images[] |= select(.name == "${{ secrets.HARBOR_REG }}/sharehouse/oshi-ramen-magazine") .newTag = "${{ needs.release.outputs.tag }}"' kustomization.yml
 
       # ターゲットリポジトリのkustomization.ymlをコミットする
       - name: Commit changes
@@ -186,16 +164,19 @@ jobs:
           git config --global user.name "${{ github.repository_owner }}"
           git config --global user.email "${{ github.repository_owner }}@users.noreply.github.com"
           git add -A
-          git commit -m "Update kustomization.yml with :${{ steps.get_tag.outputs.TAG }}"
+          git commit -m "Update kustomization.yml with :${{ needs.release.outputs.tag }}"
           git push
 
   # ArgoCDのsyncを実行する
   sync-argocd:
-    needs: edit-manifest
+    needs:
+      - release
+      - build-and-push
+      - edit-manifest
     runs-on: ubuntu-latest
     steps:
       - name: Trigger ArgoCD sync via API
         run: |
-          curl -X POST https://${{ secrets.ARGOCD_URL }}/api/v1/applications/${{ github.event.repository.name }}/sync \
+          curl -sS -o /dev/null -X POST https://${{ secrets.ARGOCD_URL }}/api/v1/applications/${{ github.event.repository.name }}/sync \
             -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
             -H "Content-Type: application/json"
